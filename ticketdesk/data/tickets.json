@@ -1,0 +1,2590 @@
+[
+ {
+  "id": "INC-1001",
+  "subject": "Locked out of my account",
+  "body": "I typed my password wrong a few times this morning and now it says my account is locked. I have a client call at 10.",
+  "requester": "maria.lopez@northline.com",
+  "created": "2026-09-24T15:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "password",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T15:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:30:03",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:30:04",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:30:04",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:30:08",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:30:11",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:30:11",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:30:11",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:30:11",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "password",
+   "level": "L1",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "User account locked due to multiple incorrect password attempts.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Password reset and locked accounts",
+    "path": "password-reset.md",
+    "score": 16.03
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 15.67
+   },
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 12.91
+   }
+  ],
+  "solution": "Okay, here’s the fix for Maria Lopez’s ticket, following the provided runbooks:\n\n1.  **Confirm Identity:** Call back Maria Lopez using the directory number to verify her identity.\n2.  **Self-Service Reset:** Send Maria to the password portal at https://password.northline.com, guiding her through the “Forgot password” process, MFA code entry, and new password creation.\n3.  **Unlock Account:** Unlock her account in the admin console (Users > search > Unlock).\n4.  **Cache Password:** Ask Maria to sign out and back into her laptop while connected to the office network or VPN.\n5.  **Note & Close:** Document the steps taken in the ticket and close it.\n\nEscalate if: the requester did not ask for the reset (possible breach), the account is a service or admin account, or the lock repeats within a day (security, L2).",
+  "draft": "Hi Maria,\n\nI understand you’re locked out of your account and have a client call at 10am.\n\nHere’s what you can do:\n\n1.  Call back using the directory number to verify your identity.\n2.  Go to https://password.northline.com and follow the “Forgot password” process.\n3.  Unlock your account in the admin console (Users > search > Unlock).\n4.  Sign out and back into your laptop while connected to the office network or VPN.\n\nIf these steps don’t work, please reply to this ticket and let us know.\n\nIT Service Desk",
+  "decision": "auto",
+  "reply": "Hi Maria,\n\nI understand you’re locked out of your account and have a client call at 10am.\n\nHere’s what you can do:\n\n1.  Call back using the directory number to verify your identity.\n2.  Go to https://password.northline.com and follow the “Forgot password” process.\n3.  Unlock your account in the admin console (Users > search > Unlock).\n4.  Sign out and back into your laptop while connected to the office network or VPN.\n\nIf these steps don’t work, please reply to this ticket and let us know.\n\nIT Service Desk\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1001",
+   "triage password L1 0.95",
+   "kb ['password-reset.md', 'how-to-microsoft-365.md', 'security-phishing.md']"
+  ]
+ },
+ {
+  "id": "INC-1002",
+  "subject": "Password expired, can't log in",
+  "body": "Got the password expired message on my laptop and cannot log in at all now. Working from the Philadelphia office today.",
+  "requester": "james.carter@northline.com",
+  "created": "2026-09-24T16:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "password",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T16:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:30:11",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:30:12",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:30:12",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:30:17",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:30:20",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:30:20",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:30:20",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:30:21",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "password",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User unable to log in due to expired password.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Password reset and locked accounts",
+    "path": "password-reset.md",
+    "score": 21.13
+   },
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 12.19
+   },
+   {
+    "title": "MFA and authenticator problems",
+    "path": "mfa-authenticator.md",
+    "score": 8.84
+   }
+  ],
+  "solution": "Okay, here’s the fix for James Carter’s ticket, following the provided runbooks:\n\n1.  **Confirm Identity:** Call James Carter back using the directory number provided and verify his employee ID.\n2.  **Self Service Reset:** Send James to the password portal at https://password.northline.com, guiding him through the “Forgot password” process, MFA code entry, and new password creation.\n3.  **Unlock Account:** In the admin console, navigate to Users > search for James Carter > Unlock the account.\n4.  **Reset Password:** Unlock the account, then reset the password to a temporary password, ensuring the “must change at next sign in” option is ticked. Read the temporary password to James over the phone.\n5.  **Sign Out/In:** Ask James to sign out of his laptop and back in while connected to the office network or VPN.\n\nEscalate if: the requester did not ask for the reset (possible breach), the account is a service or admin account, or the lock repeats within a day (security, L2).",
+  "draft": "Hi James,\n\nI understand you’re locked out of your laptop and need to reset your password.\n\nHere’s what you can do:\n\n1.  Call the directory number to verify your employee ID.\n2.  Go to https://password.northline.com and follow the “Forgot password” instructions.\n3.  Unlock your account in the admin console by going to Users, searching for your account, and unlocking it.\n4.  Reset your password to a temporary one, making sure to select the option to change it on the next sign in. We’ll read the temporary password to you over the phone.\n5.  Sign out and back into your laptop while connected to the office network or VPN.\n\nIf this doesn’t work, please reply and let us know.",
+  "decision": "auto",
+  "reply": "Hi James,\n\nI understand you’re locked out of your laptop and need to reset your password.\n\nHere’s what you can do:\n\n1.  Call the directory number to verify your employee ID.\n2.  Go to https://password.northline.com and follow the “Forgot password” instructions.\n3.  Unlock your account in the admin console by going to Users, searching for your account, and unlocking it.\n4.  Reset your password to a temporary one, making sure to select the option to change it on the next sign in. We’ll read the temporary password to you over the phone.\n5.  Sign out and back into your laptop while connected to the office network or VPN.\n\nIf this doesn’t work, please reply and let us know.\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1002",
+   "triage password L1 0.95",
+   "kb ['password-reset.md', 'security-phishing.md', 'mfa-authenticator.md']"
+  ]
+ },
+ {
+  "id": "INC-1003",
+  "subject": "Reset password please",
+  "body": "Forgot my password after vacation. Can you reset it?",
+  "requester": "priya.nair@northline.com",
+  "created": "2026-09-24T17:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "password",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T17:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:30:21",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:30:22",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:30:22",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:30:25",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:30:27",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:30:27",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:30:27",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:30:27",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "password",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User has forgotten their password and requests a reset.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Password reset and locked accounts",
+    "path": "password-reset.md",
+    "score": 12.6
+   },
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 7.79
+   },
+   {
+    "title": "VPN (GlobalProtect) will not connect, and first time setup",
+    "path": "vpn-globalprotect.md",
+    "score": 3.92
+   }
+  ],
+  "solution": "1. Confirm identity: Call back Priya Nair using the directory number to verify her identity.\n2. Self service first: Send Priya Nair to the password portal at https://password.northline.com, guiding her through the “Forgot password” process, MFA code retrieval, and new password creation.\n3. Ask the requester to sign out and back in on the laptop while on the office network or VPN so the new password is cached.\n4. Note the ticket with what you did and close it.\n\nEscalate if: the requester did not ask for the reset (possible breach), the account is a service or admin account, or the lock repeats within a day (security, L2).",
+  "draft": "Hi Priya,\n\nWe understand you’d like to reset your password.\n\nHere’s what you can do:\n\n1.  Call back using the directory number to verify your identity.\n2.  Go to the password portal at https://password.northline.com and follow the “Forgot password” process.\n3.  Sign out and back in on your laptop while connected to the office network or VPN.\n\nIf this doesn’t work, please reply to this ticket and let us know.\n\nIT Service Desk",
+  "decision": "auto",
+  "reply": "Hi Priya,\n\nWe understand you’d like to reset your password.\n\nHere’s what you can do:\n\n1.  Call back using the directory number to verify your identity.\n2.  Go to the password portal at https://password.northline.com and follow the “Forgot password” process.\n3.  Sign out and back in on your laptop while connected to the office network or VPN.\n\nIf this doesn’t work, please reply to this ticket and let us know.\n\nIT Service Desk\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1003",
+   "triage password L1 0.95",
+   "kb ['password-reset.md', 'security-phishing.md', 'vpn-globalprotect.md']"
+  ]
+ },
+ {
+  "id": "INC-1004",
+  "subject": "New phone, MFA codes gone",
+  "body": "I got a new iPhone yesterday and the Authenticator app is empty. Cannot get past the verification code screen.",
+  "requester": "tom.becker@northline.com",
+  "created": "2026-09-24T18:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "mfa",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T18:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:30:27",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:30:30",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:30:30",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:30:34",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:30:38",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:30:38",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "mfa",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User unable to access MFA after receiving a new iPhone.",
+   "missing_info": [
+    "Can you confirm the date and time the phone was issued?",
+    "Can you confirm the MFA method currently configured (Microsoft Authenticator or other)?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "MFA and authenticator problems",
+    "path": "mfa-authenticator.md",
+    "score": 20.16
+   },
+   {
+    "title": "Password reset and locked accounts",
+    "path": "password-reset.md",
+    "score": 8.32
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 7.66
+   }
+  ],
+  "solution": "1. Verify the user’s identity via callback or manager confirmation.\n2. In the admin console, navigate to Users > MFA > “Require re-registration” and have the user sign in on a laptop to scan the QR code with the Authenticator app on their new iPhone.\n3. If the codes are invalid, have the user check Authenticator > Settings > “Time correction” or enable automatic date and time on their phone and wait one minute before trying a fresh code.\n4. Confirm the phone has internet access, notifications are allowed for the Authenticator app, and the app is up to date.\n5. If still unable to receive codes, provide a one-time temporary access pass expiring in 8 hours.\n\nEscalate if: the requester reports sign in prompts they did not start (security, L2), or the account has admin roles.",
+  "draft": "Hi Tom,\n\nI understand you’re having trouble receiving MFA codes on your new iPhone.\n\nHere’s what you can try:\n\n1.  Verify your identity with a quick call to us or your manager.\n2.  Log in to the admin console, go to Users > MFA, and select “Require re-registration” – you’ll need to sign in on a laptop to scan the QR code with the Authenticator app.\n3.  Check Authenticator > Settings > “Time correction” or enable automatic date and time on your phone and wait one minute.\n4.  Make sure your phone has internet access, notifications are allowed for the Authenticator app, and the app is up to date.\n\nIf you’ve tried these steps and still aren’t receiving codes, please reply to this email and let us know.",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1005",
+  "subject": "Authenticator keeps saying code invalid",
+  "body": "Every code from the authenticator app says invalid. Time on the phone looks right.",
+  "requester": "ana.silva@northline.com",
+  "created": "2026-09-24T19:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "mfa",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T19:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:30:38",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:30:41",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:30:41",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:30:45",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:30:49",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:30:49",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "mfa",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.85,
+   "summary": "User reporting invalid MFA codes from authenticator app.",
+   "missing_info": [
+    "Can you confirm the authenticator app is the latest version?",
+    "Can you confirm you are using the correct account?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "MFA and authenticator problems",
+    "path": "mfa-authenticator.md",
+    "score": 23.67
+   },
+   {
+    "title": "VPN (GlobalProtect) will not connect, and first time setup",
+    "path": "vpn-globalprotect.md",
+    "score": 7.61
+   },
+   {
+    "title": "Server disk full, failed jobs, one service down",
+    "path": "server-disk-and-jobs.md",
+    "score": 6.03
+   }
+  ],
+  "solution": "Okay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  Verify the user’s identity via callback or manager confirmation.\n2.  Guide the user to the admin console: Users > MFA > “Require re-registration”.\n3.  Instruct the user to sign in on a laptop, get the QR code, and scan it with the Authenticator app on their new phone.\n4.  Ask the user to check the Authenticator app settings > “Time correction” and wait one minute before attempting a new code.\n\nEscalate if: the requester reports sign in prompts they did not start (security, L2), or the account has admin roles.",
+  "draft": "Hi Ana,\n\nOkay, it sounds like you’re having trouble with your authenticator codes.\n\nHere’s what you can try:\n\n1.  Please confirm your identity with your manager or by calling the IT Service Desk.\n2.  Navigate to Admin Console > Users > MFA and select “Require re-registration”.\n3.  Sign in on a laptop, get the QR code, and scan it with the Authenticator app on your new phone.\n4.  Check your Authenticator app settings and look for “Time correction”. Wait one minute and then try again.\n\nIf this doesn’t work, please reply and let us know.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1006",
+  "subject": "VPN will not connect from home",
+  "body": "GlobalProtect spins and then says could not connect to gateway. Home Wi-Fi works fine for everything else.",
+  "requester": "kevin.wu@northline.com",
+  "created": "2026-09-24T20:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "vpn",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T20:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:30:49",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:30:51",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:30:51",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:30:58",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:31:01",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:31:02",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:31:02",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:31:02",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "vpn",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.85,
+   "summary": "User unable to connect to GlobalProtect VPN from home network.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "VPN (GlobalProtect) will not connect, and first time setup",
+    "path": "vpn-globalprotect.md",
+    "score": 32.72
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 10.48
+   },
+   {
+    "title": "Software install and licence requests",
+    "path": "software-install.md",
+    "score": 5.92
+   }
+  ],
+  "solution": "Okay, here’s the fix for Kevin Wu’s ticket, based on the provided runbooks:\n\n1.  **Install GlobalProtect:** Kevin should install GlobalProtect from the company portal (Software Center on Windows, Self Service on Mac) using the address vpn.northline.com and complete the sign-in with MFA.\n2.  **Verify Internet Connectivity:** Confirm Kevin can access any website without the VPN running to rule out a home network issue.\n3.  **Restart GlobalProtect:** Kevin should right-click the tray icon > Disable, then Enable. Then reboot the laptop once.\n4.  **Verify Portal Address:** Ensure the portal address is exactly vpn.northline.com.\n5.  **Test with Hotspot:** Ask Kevin to try connecting to the VPN using a phone hotspot to isolate a potential router/ISP issue. If the hotspot works, suggest restarting the home router.\n\nEscalate if: several users from the same location fail at the same time (network, L3), or the gateway is unreachable from the office too (L2 network team).",
+  "draft": "Hi Kevin,\n\nI understand you’re having trouble connecting to the VPN from home.\n\nHere’s what you can try:\n\n1.  Install GlobalProtect from the company portal using vpn.northline.com and complete the sign-in with MFA.\n2.  Check you can access websites without the VPN running.\n3.  Right-click the tray icon > Disable, then Enable. Then reboot your laptop.\n4.  Make sure the portal address is exactly vpn.northline.com.\n5.  Try connecting with a phone hotspot to rule out a router issue.\n\nIf this doesn’t work, please reply and let us know.\n\nIT Service Desk",
+  "decision": "auto",
+  "reply": "Hi Kevin,\n\nI understand you’re having trouble connecting to the VPN from home.\n\nHere’s what you can try:\n\n1.  Install GlobalProtect from the company portal using vpn.northline.com and complete the sign-in with MFA.\n2.  Check you can access websites without the VPN running.\n3.  Right-click the tray icon > Disable, then Enable. Then reboot your laptop.\n4.  Make sure the portal address is exactly vpn.northline.com.\n5.  Try connecting with a phone hotspot to rule out a router issue.\n\nIf this doesn’t work, please reply and let us know.\n\nIT Service Desk\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1006",
+   "triage vpn L1 0.85",
+   "kb ['vpn-globalprotect.md', 'printer.md', 'software-install.md']"
+  ]
+ },
+ {
+  "id": "INC-1007",
+  "subject": "How do I set up VPN on the new laptop",
+  "body": "Just got the new laptop from the office. Where do I get GlobalProtect and what portal address do I use?",
+  "requester": "sara.kim@northline.com",
+  "created": "2026-09-24T21:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "vpn",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T21:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:31:02",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:31:04",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:31:04",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:31:16",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:31:20",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:31:20",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "vpn",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User needs assistance with GlobalProtect VPN setup on new laptop.",
+   "missing_info": [
+    "What is the user's department?",
+    "What operating system is the laptop running?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "VPN (GlobalProtect) will not connect, and first time setup",
+    "path": "vpn-globalprotect.md",
+    "score": 16.7
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 23.58
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 10.58
+   }
+  ],
+  "solution": "Okay, here’s the fix for Sara Kim’s ticket:\n\n1.  Install GlobalProtect: Please install GlobalProtect from the company portal (Software Center on Windows, Self Service on Mac). Use the portal address: vpn.northline.com.\n2.  Sign In: Sign in with Sara’s normal account and complete MFA.\n3.  Internet Connectivity: Verify Sara has internet access without the VPN by opening a website.\n4.  Restart GlobalProtect: Right-click the tray icon > Disable, then Enable. Then reboot the laptop once.\n5.  Verify Portal Address: Ensure the portal address is exactly vpn.northline.com.\n6.  Check Account Status: Confirm Sara’s account is not locked (refer to password-reset.md).\n\nEscalate if: several users from the same location fail at the same time (network, L3), or the gateway is unreachable from the office too (L2 network team).",
+  "draft": "Hi Sara,\n\nOkay, I understand you need help setting up GlobalProtect on your new laptop.\n\nHere’s what you can try:\n\n1.  Install GlobalProtect from the company portal (Software Center on Windows, Self Service on Mac).\n2.  Sign in with your normal account and complete MFA.\n3.  Check you have internet access by opening a website.\n4.  Right-click the tray icon > Disable, then Enable. Then reboot the laptop once.\n5.  Make sure the portal address is exactly vpn.northline.com.\n6.  Check your account status – see password-reset.md if needed.\n\nIf this doesn’t work, please reply and let us know.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1008",
+  "subject": "Printer on 4th floor NY not printing",
+  "body": "The Canon on the 4th floor in New York shows my job as sent but nothing comes out. Other people can print.",
+  "requester": "derek.jones@northline.com",
+  "created": "2026-09-24T22:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "printer",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T22:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:31:20",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:31:22",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:31:22",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:31:28",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:31:31",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:31:31",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:31:31",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:31:31",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "printer",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "Canon printer on 4th floor NY not printing for user.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 41.37
+   },
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 13.94
+   },
+   {
+    "title": "Server disk full, failed jobs, one service down",
+    "path": "server-disk-and-jobs.md",
+    "score": 7.47
+   }
+  ],
+  "solution": "Okay, here’s the fix for the printer issue, based on the provided runbooks:\n\n1.  Verify Printer Details: Confirm the printer is indeed NY-4-CANON on the 4th floor in New York. (printer.md, Step 1)\n2.  Re-add Printer: On the user’s laptop, remove and re-add the printer from \\\\print.northline.com, printing a test page afterward. (printer.md, Step 2)\n3.  Check Network Connection: Ensure the laptop is connected to the office network or VPN. (printer.md, Step 4)\n4.  Check Printer Date/Time: Verify the date and time on the printer panel. (printer.md, Step 5)\n\nEscalate if: the printer is offline for everyone after a power cycle (hardware, L2), or scan to email fails for every user on that printer (L2).",
+  "draft": "Hi Derek,\n\nI understand you’re having trouble with the Canon printer on the 4th floor in New York.\n\nHere’s what you can try:\n\n1.  Double-check the printer is set to NY-4-CANON.\n2.  Remove and re-add the printer from \\\\print.northline.com, then print a test page.\n3.  Make sure your laptop is connected to the office network or VPN.\n4.  Verify the date and time on the printer panel.\n\nIf these steps don’t resolve the issue, please reply to this email and let us know.\n\nIT Service Desk",
+  "decision": "auto",
+  "reply": "Hi Derek,\n\nI understand you’re having trouble with the Canon printer on the 4th floor in New York.\n\nHere’s what you can try:\n\n1.  Double-check the printer is set to NY-4-CANON.\n2.  Remove and re-add the printer from \\\\print.northline.com, then print a test page.\n3.  Make sure your laptop is connected to the office network or VPN.\n4.  Verify the date and time on the printer panel.\n\nIf these steps don’t resolve the issue, please reply to this email and let us know.\n\nIT Service Desk\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1008",
+   "triage printer L1 0.95",
+   "kb ['printer.md', 'network-and-outage.md', 'server-disk-and-jobs.md']"
+  ]
+ },
+ {
+  "id": "INC-1009",
+  "subject": "Scan to email not working",
+  "body": "Scanning from the Philadelphia lobby printer, the email never arrives. Tried twice.",
+  "requester": "linda.park@northline.com",
+  "created": "2026-09-24T23:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "printer",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T23:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:31:31",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:31:34",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:31:34",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:31:37",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:31:40",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:31:40",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:31:41",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:31:41",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "printer",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.9,
+   "summary": "User reports scan to email failing from the Philadelphia lobby printer.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 23.16
+   },
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 7.42
+   },
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 4.93
+   }
+  ],
+  "solution": "Okay, here’s the fix for Linda Park’s ticket, based on the provided runbooks:\n\n1.  Verify the email address typed by the user on the Philadelphia lobby printer (PHL-LOBBY-CANON).\n2.  Ask the user to check their junk folder for the email.\n3.  Confirm the printer’s date and time are correct on the printer panel.\n4.  Ensure the user is connected to the office network or VPN when scanning.\n\nEscalate if: scan to email fails for every user on that printer (L2).",
+  "draft": "Hi Linda,\n\nI understand you’re having trouble sending scans to email from the Philadelphia lobby printer.\n\nHere’s what you can try:\n\n1.  Double-check the email address you’re entering on the printer.\n2.  Please check your junk folder for the scan email.\n3.  Verify the printer’s date and time are correct.\n4.  Make sure you’re connected to the office network or VPN.\n\nIf this doesn’t resolve the issue, please reply to this email and let us know. \n\nIT Service Desk",
+  "decision": "auto",
+  "reply": "Hi Linda,\n\nI understand you’re having trouble sending scans to email from the Philadelphia lobby printer.\n\nHere’s what you can try:\n\n1.  Double-check the email address you’re entering on the printer.\n2.  Please check your junk folder for the scan email.\n3.  Verify the printer’s date and time are correct.\n4.  Make sure you’re connected to the office network or VPN.\n\nIf this doesn’t resolve the issue, please reply to this email and let us know. \n\nIT Service Desk\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1009",
+   "triage printer L1 0.90",
+   "kb ['printer.md', 'outlook-email.md', 'security-phishing.md']"
+  ]
+ },
+ {
+  "id": "INC-1010",
+  "subject": "Outlook stuck on updating inbox",
+  "body": "Outlook has said updating inbox since yesterday. Webmail shows new mail. Restarted twice.",
+  "requester": "omar.hassan@northline.com",
+  "created": "2026-09-25T00:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "email",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T00:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:31:41",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:31:43",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:31:43",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:31:48",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:31:52",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:31:52",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:31:52",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:31:52",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "email",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.85,
+   "summary": "User experiencing issues with Outlook failing to update inbox.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 24.43
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 6.59
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 4.83
+   }
+  ],
+  "solution": "Okay, here’s the fix for the Outlook update issue, based on the provided runbooks:\n\n1.  **Verify Webmail:** Compare the user’s Outlook with webmail (outlook.office.com). If webmail shows new mail, the issue is likely within the Outlook app itself.\n2.  **Offline Mode:** Close Outlook, ensure “Work Offline” is turned off, and attempt to open Outlook again.\n3.  **New Outlook Profile:** If Outlook still hangs, create a new Outlook profile (Control Panel > Mail > Show Profiles > Add).\n4.  **Check Junk Folder & Quarantine:** Check the junk folder and the quarantine portal (security.microsoft.com > Quarantine) for the affected sender. Release and add the sender to safe senders.\n\nEscalate if: webmail is also failing for more than one person (outage, L3), or a mailbox is over its size limit and needs an archive change (L2).",
+  "draft": "Hi Omar,\n\nI understand you’re having trouble with Outlook updating your inbox.\n\nHere’s what you can try:\n\n1.  Confirm webmail (outlook.office.com) shows new mail.\n2.  Close Outlook, turn off “Work Offline,” and reopen Outlook.\n3.  Create a new Outlook profile (Control Panel > Mail > Show Profiles > Add).\n4.  Check your junk folder and the quarantine portal (security.microsoft.com > Quarantine) for any issues.\n\nIf these steps don’t resolve the problem, please reply to this email and let us know.",
+  "decision": "auto",
+  "reply": "Hi Omar,\n\nI understand you’re having trouble with Outlook updating your inbox.\n\nHere’s what you can try:\n\n1.  Confirm webmail (outlook.office.com) shows new mail.\n2.  Close Outlook, turn off “Work Offline,” and reopen Outlook.\n3.  Create a new Outlook profile (Control Panel > Mail > Show Profiles > Add).\n4.  Check your junk folder and the quarantine portal (security.microsoft.com > Quarantine) for any issues.\n\nIf these steps don’t resolve the problem, please reply to this email and let us know.\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1010",
+   "triage email L1 0.85",
+   "kb ['outlook-email.md', 'how-to-microsoft-365.md', 'printer.md']"
+  ]
+ },
+ {
+  "id": "INC-1011",
+  "subject": "Not receiving emails from a vendor",
+  "body": "Emails from billing@acmecorp.com never arrive. They say they sent three. Nothing in junk.",
+  "requester": "grace.chen@northline.com",
+  "created": "2026-09-25T01:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "email",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T01:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:31:52",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:31:55",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:31:55",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:32:00",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:32:04",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:32:04",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "email",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.9,
+   "summary": "User is not receiving emails from acmecorp.com.",
+   "missing_info": [
+    "Can you please confirm the exact email address the vendor is sending from?",
+    "Can you confirm the user's Outlook settings (specifically, checking for email forwarding or rules?)"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 5.42
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 9.57
+   },
+   {
+    "title": "MFA and authenticator problems",
+    "path": "mfa-authenticator.md",
+    "score": 7.74
+   }
+  ],
+  "solution": "Okay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  Verify webmail access: Access outlook.office.com to confirm the user can receive emails.\n2.  Check Junk Folder: Ask the user to check their junk folder and the quarantine portal (security.microsoft.com > Quarantine) for the emails from acmecorp.com.\n3.  Add Sender to Safe Senders: If the emails are found in the quarantine, release them and add billing@acmecorp.com to the safe senders list within Outlook.\n4.  Restart Outlook: Close Outlook, open it with Work Offline off, and restart Outlook.\n\nEscalate if: webmail is also failing for more than one person (outage, L3), or a mailbox is over its size limit and needs an archive change (L2).",
+  "draft": "Hi Grace,\n\nWe’ve identified the reason you’re not receiving emails from AcmeCorp.\n\nHere’s what you can try:\n\n1.  Go to outlook.office.com and check if you can receive emails.\n2.  Double-check your junk folder and the quarantine portal (security.microsoft.com > Quarantine) for the emails.\n3.  If you find the emails in the quarantine, release them and add billing@acmecorp.com to your safe senders list in Outlook.\n4.  Restart Outlook by closing and reopening it.\n\nIf this doesn’t resolve the issue, please reply to this ticket and let us know.",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1012",
+  "subject": "Shared mailbox missing in Outlook",
+  "body": "I was told I have access to the sales shared mailbox but it does not show up in Outlook.",
+  "requester": "nick.rossi@northline.com",
+  "created": "2026-09-25T02:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "email",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T02:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:32:04",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:32:07",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:32:07",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:32:11",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:32:15",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:32:15",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "email",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User reports missing shared mailbox in Outlook.",
+   "missing_info": [
+    "Can you please confirm the exact name of the shared mailbox (e.g., Sales Team)?",
+    "What version of Outlook are you using?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 30.49
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 16.1
+   },
+   {
+    "title": "Access requests: shared drives, apps, new hires, leavers",
+    "path": "access-requests.md",
+    "score": 8.86
+   }
+  ],
+  "solution": "1.  Verify the requester was added to the sales shared mailbox by checking the admin console. This should appear in Outlook within one hour.\n2.  Restart Outlook.\n3.  Confirm the requester can access the sales shared mailbox via webmail (outlook.office.com) to rule out an Outlook app issue.\n4.  If the issue persists after steps 1-3, check the junk folder and quarantine portal (security.microsoft.com > Quarantine) for any blocked mail.\n\nEscalate if: webmail is also failing for more than one person (outage, L3), or a mailbox is over its size limit and needs an archive change (L2).",
+  "draft": "Hi Nick,\n\nI understand you’re having trouble seeing the sales shared mailbox in Outlook.\n\nHere’s what you can try:\n\n1.  Check the admin console to confirm you’ve been added to the sales shared mailbox.\n2.  Restart Outlook.\n3.  Try accessing the sales shared mailbox via webmail (outlook.office.com) to see if that works.\n4.  Check your junk folder and quarantine portal (security.microsoft.com > Quarantine) for any blocked mail.\n\nIf you’re still experiencing problems after trying these steps, please reply to this email and let us know.",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1013",
+  "subject": "How do I share my calendar with my manager",
+  "body": "Is there a way to let my manager see my calendar details, not just free or busy?",
+  "requester": "emily.wright@northline.com",
+  "created": "2026-09-25T03:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "how_to",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T03:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:32:15",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:32:17",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:32:17",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:32:20",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:32:23",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:32:23",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:32:23",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:32:23",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "how_to",
+   "level": "L1",
+   "urgency": "low",
+   "confidence": 0.95,
+   "summary": "User needs guidance on sharing their Microsoft 365 calendar with their manager.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 26.97
+   },
+   {
+    "title": "Access requests: shared drives, apps, new hires, leavers",
+    "path": "access-requests.md",
+    "score": 9.49
+   },
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 8.99
+   }
+  ],
+  "solution": "1.  Open Outlook and navigate to Calendar > right click the calendar.\n2.  Select “Sharing Permissions”.\n3.  Add your manager’s email address.\n4.  Choose “Can view all details”.\n5.  Consult runbook “How do I ... Microsoft 365 and Teams (how-to-microsoft-365.md)” for further assistance.\n\nEscalate if: the requester needs a licence or feature that is off for their account (L2, software).",
+  "draft": "Hi Emily,\n\nOkay, you want to share your calendar details with your manager, not just your availability.\n\nHere’s how you can do that:\n\n1.  Open Outlook and go to Calendar.\n2.  Right click on your calendar.\n3.  Select “Sharing Permissions”.\n4.  Add your manager’s email address.\n5.  Choose “Can view all details”.\n\nIf this doesn’t work, please reply to this email and let us know.",
+  "decision": "auto",
+  "reply": "Hi Emily,\n\nOkay, you want to share your calendar details with your manager, not just your availability.\n\nHere’s how you can do that:\n\n1.  Open Outlook and go to Calendar.\n2.  Right click on your calendar.\n3.  Select “Sharing Permissions”.\n4.  Add your manager’s email address.\n5.  Choose “Can view all details”.\n\nIf this doesn’t work, please reply to this email and let us know.\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1013",
+   "triage how_to L1 0.95",
+   "kb ['how-to-microsoft-365.md', 'access-requests.md', 'outlook-email.md']"
+  ]
+ },
+ {
+  "id": "INC-1014",
+  "subject": "How to record a Teams meeting",
+  "body": "Can you show me where the record button is in Teams, and where the recording ends up?",
+  "requester": "raj.patel@northline.com",
+  "created": "2026-09-25T04:08",
+  "status": "auto_replied",
+  "stage": "done",
+  "expected": {
+   "category": "how_to",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T04:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:32:24",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:32:26",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:32:26",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:32:29",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:32:32",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:32:32",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-26T01:32:32",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:32:32",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "how_to",
+   "level": "L1",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User needs instructions on how to start and locate Teams meeting recordings.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 28.08
+   },
+   {
+    "title": "Firewall change requests",
+    "path": "firewall-change.md",
+    "score": 11.14
+   },
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 9.82
+   }
+  ],
+  "solution": "Here’s the fix for the ticket:\n\n1.  Open the Teams meeting.\n2.  Click the three dots (More) in the meeting controls.\n3.  Select “Record and transcribe” and then click “Start recording”.\n4.  The recording will be saved in the organiser’s OneDrive under Recordings, and in the meeting chat.\n\nEscalate if: the requester needs a licence or feature that is off for their account (L2, software).",
+  "draft": "Hi Raj,\n\nI understand you’re looking for instructions on how to record a Teams meeting.\n\nHere’s how to do it:\n\n1. Open the Teams meeting.\n2. Click the three dots (More) in the meeting controls.\n3. Select “Record and transcribe” and then click “Start recording”.\n4. The recording will be saved in the organiser’s OneDrive under Recordings, and in the meeting chat.\n\nIf this doesn’t work, please reply and let us know.",
+  "decision": "auto",
+  "reply": "Hi Raj,\n\nI understand you’re looking for instructions on how to record a Teams meeting.\n\nHere’s how to do it:\n\n1. Open the Teams meeting.\n2. Click the three dots (More) in the meeting controls.\n3. Select “Record and transcribe” and then click “Start recording”.\n4. The recording will be saved in the organiser’s OneDrive under Recordings, and in the meeting chat.\n\nIf this doesn’t work, please reply and let us know.\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1014",
+   "triage how_to L1 0.95",
+   "kb ['how-to-microsoft-365.md', 'firewall-change.md', 'outlook-email.md']"
+  ]
+ },
+ {
+  "id": "INC-1015",
+  "subject": "Access to the finance shared drive",
+  "body": "Please add me to the finance shared drive. My manager Dana approved it in our 1:1.",
+  "requester": "lucas.brown@northline.com",
+  "created": "2026-09-25T05:08",
+  "status": "escalated_L2",
+  "stage": "done",
+  "expected": {
+   "category": "access_request",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T05:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:32:32",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:32:34",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:32:34",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:32:38",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:32:41",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:32:41",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:32:41",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:32:41",
+    "event": "escalated to L2"
+   },
+   {
+    "at": "2026-09-26T01:32:41",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "access_request",
+   "level": "L2",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User requesting access to the finance shared drive.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Access requests: shared drives, apps, new hires, leavers",
+    "path": "access-requests.md",
+    "score": 30.71
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 13.04
+   },
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 9.97
+   }
+  ],
+  "solution": "1.  Please ask Dana to reply to the ticket with their approval.\n2.  Once approved, add the user to the GRP-Finance group.\n3.  Inform the user that access will appear after their next sign-in.\n4.  Share the Microsoft 365 and Teams how-to guide (how-to-microsoft-365.md) with the user for calendar sharing and Teams recording.\n\nEscalate if: the request is for admin rights, finance systems, or production servers.",
+  "draft": "Hi Lucas,\n\nOkay, I understand you need access to the finance shared drive.\n\nHere’s what you can do:\n\n1.  Please ask Dana to reply to this ticket with their approval.\n2.  Once approved, access should appear after you sign in again.\n3.  You can also review the Microsoft 365 and Teams how-to guide here: how-to-microsoft-365.md.\n\nIf it doesn’t work after you sign in again, please let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Lucas,\n\nThanks, we have your ticket. I understand: User requesting access to the finance shared drive..\nThis needs a specialist, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L2 queue",
+  "escalation_note": "Escalated to L2 by ticketdesk. Category: access_request. Urgency: normal. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: User requesting access to the finance shared drive.\n\nSuggested fix:\n1.  Please ask Dana to reply to the ticket with their approval.\n2.  Once approved, add the user to the GRP-Finance group.\n3.  Inform the user that access will appear after their next sign-in.\n4.  Share the Microsoft 365 and Teams how-to guide (how-to-microsoft-365.md) with the user for calendar sharing and Teams recording.\n\nEscalate if: the request is for admin rights, finance systems, or production servers.\n\nRunbooks: access-requests.md, how-to-microsoft-365.md, outlook-email.md\n",
+  "outcome": "escalated_L2",
+  "agent_notes": [
+   "intake INC-1015",
+   "triage access_request L2 0.95",
+   "kb ['access-requests.md', 'how-to-microsoft-365.md', 'outlook-email.md']"
+  ]
+ },
+ {
+  "id": "INC-1016",
+  "subject": "New hire starts Monday",
+  "body": "Jordan Lee starts Monday in marketing, New York office. Needs laptop, email, Teams, and access to the marketing drive.",
+  "requester": "hannah.moore@northline.com",
+  "created": "2026-09-25T06:08",
+  "status": "escalated_L2",
+  "stage": "done",
+  "expected": {
+   "category": "access_request",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T06:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:32:41",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:32:44",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:32:44",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:32:57",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:33:01",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:33:01",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:33:01",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:33:01",
+    "event": "escalated to L2"
+   },
+   {
+    "at": "2026-09-26T01:33:01",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "access_request",
+   "level": "L2",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "New hire access requirements for Jordan Lee in the New York marketing office.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Access requests: shared drives, apps, new hires, leavers",
+    "path": "access-requests.md",
+    "score": 11.53
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 7.23
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 7.19
+   }
+  ],
+  "solution": "Okay, here’s the fix for the new hire access request for Jordan Lee, based on the provided runbooks:\n\n1.  **Log the Request:** Service Desk, log the access request in Freshservice with category ‘access_request’ and level ‘L2’.\n2.  **Manager Approval:** Request the manager to approve the access request on the ticket.\n3.  **Shared Drive Access:** Once approved, add Jordan Lee to the matching AD group (GRP-Marketing-RW).\n4.  **App Licensing:** Once approved, L2 will assign the necessary licenses (Freshservice, Adobe, Visio) and note the cost centre on the ticket.\n5.  **New Hire Account Creation:**  Create the account using the new hire template, order the laptop, and add him to the office and team groups – this should have been initiated by HR at least 5 business days prior to the start date.\n6.  **Provide Details:** Inform Jordan Lee of the expected date for access completion.\n\nEscalate if: the request is for admin rights, finance systems, or production servers.",
+  "draft": "Hi Jordan,\n\nWe’ve received your request for Jordan Lee’s access and are working to get him set up.\n\nHere’s what you need to do:\n\n1.  Log the access request in Freshservice with category ‘access_request’ and level ‘L2’.\n2.  Request the manager to approve the access request on the ticket.\n3.  Once approved, add Jordan Lee to the matching AD group (GRP-Marketing-RW).\n4.  L2 will assign the necessary licenses and note the cost centre.\n\nIf this doesn’t work, please reply to this ticket and let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Hannah,\n\nThanks, we have your ticket. I understand: New hire access requirements for Jordan Lee in the New York marketing office..\nThis needs a specialist, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L2 queue",
+  "escalation_note": "Escalated to L2 by ticketdesk. Category: access_request. Urgency: normal. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: New hire access requirements for Jordan Lee in the New York marketing office.\n\nSuggested fix:\nOkay, here’s the fix for the new hire access request for Jordan Lee, based on the provided runbooks:\n\n1.  **Log the Request:** Service Desk, log the access request in Freshservice with category ‘access_request’ and level ‘L2’.\n2.  **Manager Approval:** Request the manager to approve the access request on the ticket.\n3.  **Shared Drive Access:** Once approved, add Jordan Lee to the matching AD group (GRP-Marketing-RW).\n4.  **App Licensing:** Once approved, L2 will assign the necessary licenses (Freshservice, Adobe, Visio) and note the cost centre on the ticket.\n5.  **New Hire Account Creation:**  Create the account using the new hire template, order the laptop, and add him to the office and team groups – this should have been initiated by HR at least 5 business days prior to the start date.\n6.  **Provide Details:** Inform Jordan Lee of the expected date for access completion.\n\nEscalate if: the request is for admin rights, finance systems, or production servers.\n\nRunbooks: access-requests.md, how-to-microsoft-365.md, printer.md\n",
+  "outcome": "escalated_L2",
+  "agent_notes": [
+   "intake INC-1016",
+   "triage access_request L2 0.95",
+   "kb ['access-requests.md', 'how-to-microsoft-365.md', 'printer.md']"
+  ]
+ },
+ {
+  "id": "INC-1017",
+  "subject": "Need Visio installed",
+  "body": "I need Visio for network diagrams for the audit. Can it be installed this week?",
+  "requester": "victor.ramos@northline.com",
+  "created": "2026-09-25T07:08",
+  "status": "escalated_L2",
+  "stage": "done",
+  "expected": {
+   "category": "software",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T07:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:33:01",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:33:03",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:33:03",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:33:08",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:33:11",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:33:11",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:33:11",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:33:11",
+    "event": "escalated to L2"
+   },
+   {
+    "at": "2026-09-26T01:33:11",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "software",
+   "level": "L2",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User requests Visio installation for network diagrams.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Software install and licence requests",
+    "path": "software-install.md",
+    "score": 10.59
+   },
+   {
+    "title": "Firewall change requests",
+    "path": "firewall-change.md",
+    "score": 9.55
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 6.88
+   }
+  ],
+  "solution": "Okay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  The user needs Visio, so follow the “Software install and licence requests” runbook (software-install.md).\n2.  The user should install Visio from Software Center (Windows) or Self Service (Mac) – no ticket needed for catalogue apps.\n3.  A manager approval is required, along with a cost centre.\n4.  Once the manager approves, the licence will be assigned and Visio should appear in Software Center within an hour.\n5.  Note the ticket with the licence assigned and close.\n\nEscalate if: the app needs admin rights to run, touches production data, or the licence pool is empty.",
+  "draft": "Hi Victor,\n\nOkay, I understand you need Visio installed for your network diagrams.\n\nHere’s what you can do:\n\n1.  Follow the “Software install and licence requests” runbook (software-install.md).\n2.  Install Visio from Software Center (Windows) or Self Service (Mac).\n3.  Please inform your manager and provide the cost centre.\n4.  Once approved, Visio should appear in Software Center within an hour.\n5.  Let us know if you encounter any issues.\n\nIf it doesn’t work after these steps, please reply and let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Victor,\n\nThanks, we have your ticket. I understand: User requests Visio installation for network diagrams..\nThis needs a specialist, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L2 queue",
+  "escalation_note": "Escalated to L2 by ticketdesk. Category: software. Urgency: normal. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: User requests Visio installation for network diagrams.\n\nSuggested fix:\nOkay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  The user needs Visio, so follow the “Software install and licence requests” runbook (software-install.md).\n2.  The user should install Visio from Software Center (Windows) or Self Service (Mac) – no ticket needed for catalogue apps.\n3.  A manager approval is required, along with a cost centre.\n4.  Once the manager approves, the licence will be assigned and Visio should appear in Software Center within an hour.\n5.  Note the ticket with the licence assigned and close.\n\nEscalate if: the app needs admin rights to run, touches production data, or the licence pool is empty.\n\nRunbooks: software-install.md, firewall-change.md, how-to-microsoft-365.md\n",
+  "outcome": "escalated_L2",
+  "agent_notes": [
+   "intake INC-1017",
+   "triage software L2 0.95",
+   "kb ['software-install.md', 'firewall-change.md', 'how-to-microsoft-365.md']"
+  ]
+ },
+ {
+  "id": "INC-1018",
+  "subject": "Adobe Acrobat licence",
+  "body": "Acrobat says my licence is not valid anymore. I sign contracts daily so this is blocking.",
+  "requester": "sophie.turner@northline.com",
+  "created": "2026-09-25T08:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "software",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T08:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:33:11",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:33:14",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:33:14",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:33:18",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:33:21",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:33:21",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "software",
+   "level": "L2",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "User reports Adobe Acrobat license is invalid, impacting daily contract work.",
+   "missing_info": [
+    "Can you please provide your employee ID?",
+    "Can you confirm the version of Adobe Acrobat you are using?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Software install and licence requests",
+    "path": "software-install.md",
+    "score": 15.35
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 8.51
+   },
+   {
+    "title": "Access requests: shared drives, apps, new hires, leavers",
+    "path": "access-requests.md",
+    "score": 6.78
+   }
+  ],
+  "solution": "Okay, here’s the fix for the Adobe Acrobat licence issue, based on the provided runbooks:\n\n1.  Ask the user to sign out of the Adobe Acrobat application and then sign back in using their work account.\n2.  Check the licence assignment in the admin console (using the software-install.md runbook, section 3).\n3.  If the issue persists after checking the licence assignment, note the ticket with the licence assigned and close.\n\nEscalate if: the app needs admin rights to run, touches production data, or the licence pool is empty (L2).",
+  "draft": "Hi Sophie,\n\nI understand you’re having trouble with your Adobe Acrobat license.\n\nHere’s what you can try:\n\n1.  Sign out of Adobe Acrobat and then sign back in using your work account.\n2.  Check the license assignment in the admin console following the software-install.md runbook, section 3.\n3.  If the problem continues, please reply to this ticket with the license assigned and we’ll investigate further.\n\nWhat to reply if it did not work: Please let us know if these steps didn’t resolve the issue.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1019",
+  "subject": "Laptop will not turn on",
+  "body": "My laptop will not turn on at all. No light, tried the charger from a colleague. Philadelphia office.",
+  "requester": "ben.foster@northline.com",
+  "created": "2026-09-25T09:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "hardware",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T09:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:33:22",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:33:24",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:33:24",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:33:30",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:33:33",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:33:33",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "hardware",
+   "level": "L2",
+   "urgency": "normal",
+   "confidence": 0.8,
+   "summary": "Laptop failing to power on.",
+   "missing_info": [
+    "Can you confirm the laptop is plugged in securely?  What is the make and model of the laptop?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Laptops, monitors, docks and phones",
+    "path": "hardware.md",
+    "score": 18.46
+   },
+   {
+    "title": "VPN (GlobalProtect) will not connect, and first time setup",
+    "path": "vpn-globalprotect.md",
+    "score": 12.77
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 9.23
+   }
+  ],
+  "solution": "Okay, here’s the fix for the laptop issue, based on the provided runbooks:\n\n1.  **Initial Power Cycle:** Hold the power button for 15 seconds, unplug the dock, plug the charger directly into the laptop, and try to power it on. (hardware.md, Runbook 1)\n2.  **Dock Reset:** Unplug the dock from the laptop and from power for one minute, plug power first, then the laptop. Update the dock firmware from Software Center. Try the second monitor on the other dock port. (hardware.md, Runbook 2)\n3.  **GlobalProtect Check:** Install GlobalProtect from the company portal (vpn.northline.com). Sign in with the normal account and MFA. (vpn-globalprotect.md, Runbook 1)\n4.  **Internet Connectivity Test:** Verify the user can access the internet without the VPN. (vpn-globalprotect.md, Runbook 2)\n5.  **GlobalProtect Restart:** Right-click the tray icon > Disable, then Enable. Then reboot the laptop once. (vpn-globalprotect.md, Runbook 3)\n\nEscalate if: The laptop still fails to power on after these steps, or if the user reports persistent connectivity issues with GlobalProtect.",
+  "draft": "Hi Ben,\n\nOkay, it sounds like your laptop isn’t powering on.\n\nHere’s what you can try:\n\n1.  Hold the power button for 15 seconds.\n2.  Unplug the dock and plug the charger directly into the laptop.\n3.  Unplug the dock from both the laptop and power for one minute, then plug power in first, followed by the laptop. Update the dock firmware from Software Center.\n4.  Install GlobalProtect from vpn.northline.com and sign in with your account and MFA.\n5.  Right-click the tray icon > Disable, then Enable, and reboot your laptop.\n\nIf these steps don’t work, please reply to this email and let us know.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1020",
+  "subject": "Docking station only shows one monitor",
+  "body": "Since the update my dock only drives one of my two monitors. Swapped cables, same thing.",
+  "requester": "ivy.zhang@northline.com",
+  "created": "2026-09-25T10:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "hardware",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T10:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:33:33",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:33:35",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:33:35",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:33:39",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:33:42",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:33:42",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "hardware",
+   "level": "L2",
+   "urgency": "normal",
+   "confidence": 0.8,
+   "summary": "Docking station is only displaying one monitor after update.",
+   "missing_info": [
+    "What is the make and model of the docking station?",
+    "What operating system are you using?",
+    "Can you confirm the monitors are both recognized by the operating system?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Laptops, monitors, docks and phones",
+    "path": "hardware.md",
+    "score": 16.82
+   },
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 8.68
+   },
+   {
+    "title": "Access requests: shared drives, apps, new hires, leavers",
+    "path": "access-requests.md",
+    "score": 7.26
+   }
+  ],
+  "solution": "Okay, here’s the fix for the docking station issue, based on the provided runbooks:\n\n1.  **Unplug and Reset:** Unplug the docking station from the laptop and from power. Wait one minute, then plug the power back in. Then, plug the laptop back in.\n2.  **Firmware Update:** Update the dock firmware from Software Center.\n3.  **Try Alternate Port:** Try connecting the second monitor to the other dock port.\n4.  **Check for Scope:** Confirm the scope of the issue – how many people are affected, which office, wired or Wi-Fi, since when. (Refer to network-and-outage.md)\n\nEscalate if: any hardware needs opening or replacing, or more than one user hit the same fault after an update (L2, possibly a rollback).",
+  "draft": "Hi Ivy,\n\nWe understand that your docking station is only displaying one monitor.\n\nHere’s what you can try:\n\n1.  Unplug the docking station from your laptop and from power. Wait one minute, then plug the power back in. Then, plug the laptop back in.\n2.  Update the dock firmware from Software Center.\n3.  Try connecting the second monitor to the other dock port.\n4.  Check for Scope: Please let us know how many people are affected, which office, whether they are wired or Wi-Fi, and since when the issue started.\n\nIf these steps don’t resolve the problem, please reply to this email and let us know.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1021",
+  "subject": "Reporting server disk is full",
+  "body": "The reporting server (RPT-01) says disk full and the nightly job failed. Finance needs the report by noon.",
+  "requester": "mark.evans@northline.com",
+  "created": "2026-09-25T11:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "server",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T11:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:33:42",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:33:44",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:33:44",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:33:50",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:33:52",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:33:52",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "server",
+   "level": "L2",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "RPT-01 server disk full, impacting nightly job and Finance report delivery.",
+   "missing_info": [
+    "Can you confirm the size of the disk and the size of the nightly job?",
+    "What is the name of the nightly job?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Server disk full, failed jobs, one service down",
+    "path": "server-disk-and-jobs.md",
+    "score": 31.65
+   },
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 10.54
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 7.91
+   }
+  ],
+  "solution": "Okay, let’s address this ticket.\n\n1.  **Gather Facts:** (Using server-disk-and-jobs.md) Collect the following information from Mark Evans: server name (RPT-01), the exact name of the failed job, the error code, when the issue started, which Finance team is affected, and the deadline for the report.\n2.  **Run Cleanup Script:** (Using server-disk-and-jobs.md) Execute the cleanup script located at `C:\\ops\\cleanup-reports.ps1` on the RPT-01 server.\n3.  **Check Backup Job:** (Using server-disk-and-jobs.md) Verify the backup job is running successfully via the backup console. If error 0x8007xxxx is present, manually re-run the job.\n4.  **Monitor & Update:** (Using server-disk-and-jobs.md) Keep Mark Evans updated every hour on the progress of the investigation and estimated time to resolution.\n\nEscalate if: the server hosts a core service for everyone (email, files, ERP) or more than one server shows the same fault (L3 incident).",
+  "draft": "Hi Mark,\n\nWe understand the reporting server (RPT-01) is full and the nightly job failed.\n\nHere’s what you can do:\n\n1.  Please provide the exact name of the failed job.\n2.  Run the cleanup script located at `C:\\ops\\cleanup-reports.ps1` on the RPT-01 server.\n3.  Verify the backup job is running successfully via the backup console.\n4.  We’ll keep you updated every hour on the progress.\n\nIf these steps don’t resolve the issue, please reply to this email and let us know.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1022",
+  "subject": "Backup job failed last night",
+  "body": "The backup job for the file server shows failed with error 0x8007 in the console. Second night in a row.",
+  "requester": "olivia.scott@northline.com",
+  "created": "2026-09-25T12:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "server",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T12:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:33:52",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:33:55",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:33:55",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:34:01",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:34:05",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:34:05",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "server",
+   "level": "L2",
+   "urgency": "normal",
+   "confidence": 0.8,
+   "summary": "File server backup job failing with error 0x8007.",
+   "missing_info": [
+    "Can you please provide the name of the file server?",
+    "What is the name of the backup job?",
+    "What is the backup software being used?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Server disk full, failed jobs, one service down",
+    "path": "server-disk-and-jobs.md",
+    "score": 28.34
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 11.04
+   },
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 10.73
+   }
+  ],
+  "solution": "Okay, here’s the fix plan based on the provided runbooks:\n\n1.  **Gather Facts:** Collect the server name, the specific backup job name, the exact error code (0x8007), the start time of the failures, which users/teams are affected, and if there’s a critical deadline for the backup. (Refer to: server-disk-and-jobs.md, Step 1)\n2.  **Check Backup Target:** Verify free space on the backup target share. (Refer to: server-disk-and-jobs.md, Step 3)\n3.  **Run Backup Manually:** If the backup target has sufficient space, manually run the backup job from the console. (Refer to: server-disk-and-jobs.md, Step 3)\n4.  **Check Printer Status:** Confirm the printer is online and functioning correctly. (Refer to: printer.md, Steps 2, 3, 4, 5)\n5.  **Re-add Printer:** If the printer is offline on a laptop, remove and re-add it from the print server. (Refer to: printer.md, Step 2)\n\nEscalate if: the server hosts a core service for everyone (email, files, ERP) or more than one server shows the same fault (L3 incident).",
+  "draft": "Hi Olivia,\n\nI understand the backup job is failing with error 0x8007.\n\nHere’s what you can try:\n\n1.  Please collect the server name, backup job name, error code, start time, affected users/teams, and any deadlines.\n2.  Check the free space on the backup target share.\n3.  Try running the backup job manually from the console.\n4.  Confirm the printer is online and functioning correctly.\n5.  If the printer is offline on a laptop, remove and re-add it from the print server.\n\nIf these steps don’t resolve the issue, please reply to this email and let us know.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1023",
+  "subject": "Suspicious email asking for gift cards",
+  "body": "I got an email that looks like it is from our CEO asking me to buy gift cards. I did not click anything. Is this phishing?",
+  "requester": "chloe.adams@northline.com",
+  "created": "2026-09-25T13:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "security",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T13:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:34:05",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:34:07",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:34:07",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:34:12",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:34:15",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:34:15",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "security",
+   "level": "L2",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "User reports a suspicious email purporting to be from the CEO requesting gift card purchases, potentially a phishing attempt.",
+   "missing_info": [
+    "Can you please provide the exact subject line and sender email address?",
+    "Do you have the email in your inbox?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 24.68
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 14.45
+   },
+   {
+    "title": "VPN (GlobalProtect) will not connect, and first time setup",
+    "path": "vpn-globalprotect.md",
+    "score": 8.71
+   }
+  ],
+  "solution": "1.  Thank the user for reporting the suspicious email and advise them to report it using the Report Phishing button in Outlook and delete the email. Do not reply to the sender. (security-phishing.md)\n2.  If the user clicked a link or typed a password, immediately reset their password, require MFA re-registration, and sign the user out of all sessions in the admin console. Open a Security ticket with the email headers. (password-reset.md)\n3.  If an attachment was opened, disconnect the laptop from the network (Wi-Fi off, cable out), keep it on, and call Security. (security-phishing.md)\n4.  If the user reports a lost or stolen device, wipe it from the device console, reset the password, and note the police report number if any. (security-phishing.md)\n\nEscalate if: always. Every item here becomes a Security (L2) ticket after the first steps. Many users reporting the same email is an incident (L3).",
+  "draft": "Hi Chloe,\n\nOkay, so you received a suspicious email that appeared to be from our CEO asking about gift cards.\n\nHere’s what you can do:\n\n1.  Click the Report Phishing button in Outlook and delete the email.\n2.  Do not reply to the sender.\n3.  If you clicked a link or entered your password, immediately reset your password and contact us.\n\nWhat to reply if it did not work:\n\nPlease let us know immediately if you continue to receive this email or if you think any information may have been compromised.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1024",
+  "subject": "I clicked a link in a strange email",
+  "body": "I clicked a link in an email about a shared document and it asked me to log in. I typed my password before I realised. What do I do?",
+  "requester": "daniel.green@northline.com",
+  "created": "2026-09-25T14:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "security",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T14:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:34:15",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:34:18",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:34:18",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:34:20",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:34:23",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:34:23",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "security",
+   "level": "L2",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "User clicked a malicious link in a phishing email and may have entered credentials.",
+   "missing_info": [
+    "Can you please provide the exact email address the email was sent from?",
+    "Can you provide the exact text of the email you received?",
+    "Can you confirm if you have already changed your password?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 27.7
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 32.58
+   },
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 14.8
+   }
+  ],
+  "solution": "1. Reset the user’s password immediately using the `password-reset.md` runbook.\n2. Require MFA re-registration for the user.\n3. Sign the user out of all sessions in the admin console.\n4. Open a Security ticket with the email headers from the suspicious email.\n\nEscalate if: always.",
+  "draft": "Hi Daniel,\n\nOkay, so you clicked a link in a suspicious email and entered your password.\n\nHere’s what you can do:\n\n1. Reset your password immediately using the password-reset.md runbook.\n2. Request MFA re-registration through your employee portal.\n3. Sign out of all sessions in the admin console.\n4. Please open a Security ticket and attach the email headers from the suspicious email.\n\nIf this doesn’t resolve the issue, please reply to the Security ticket with an update.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1025",
+  "subject": "Firewall rule for ping and traceroute",
+  "body": "We need to allow ping and traceroute from the New York office to the monitoring server in Philadelphia for the new NOC tool.",
+  "requester": "alex.murphy@northline.com",
+  "created": "2026-09-25T15:08",
+  "status": "escalated_L2",
+  "stage": "done",
+  "expected": {
+   "category": "firewall_change",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T15:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:34:23",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:34:24",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:34:24",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:34:30",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:34:33",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:34:33",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:34:33",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:34:33",
+    "event": "escalated to L2"
+   },
+   {
+    "at": "2026-09-26T01:34:33",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "firewall_change",
+   "level": "L2",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "User requesting firewall rule to allow ping and traceroute to monitoring server.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Firewall change requests",
+    "path": "firewall-change.md",
+    "score": 24.93
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 13.63
+   },
+   {
+    "title": "Access requests: shared drives, apps, new hires, leavers",
+    "path": "access-requests.md",
+    "score": 9.67
+   }
+  ],
+  "solution": "Okay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  Collect the five facts:\n    *   Source: New York office (specify subnet if possible).\n    *   Destination: Monitoring server in Philadelphia (IP address).\n    *   Ports & Protocol: ICMP echo for ping, UDP 33434 to 33534 for traceroute.\n    *   Direction: From New York to Philadelphia.\n    *   Business Reason: NOC tool monitoring.\n2.  Check whether the rule already exists: The Network team should check the current firewall configuration. If the rule exists, reply with the existing configuration and close the ticket.\n3.  Write the change: The Network team should document the change on the firewall change template (OneNote) including the five facts, the impact (allowing ping and traceroute), and a backout plan (reverting the rule).\n4.  Schedule Review: The change should be added to the weekly review meeting agenda.\n\nEscalate if: the firewall team cannot confirm the rule doesn't exist or the change cannot be implemented within the standard process.",
+  "draft": "Hi Alex,\n\nWe’ve identified the need to allow ping and traceroute from the New York office to the monitoring server in Philadelphia.\n\nHere’s what you can do:\n\n1.  Note down the exact subnet for the New York office.\n2.  Record the IP address of the monitoring server in Philadelphia.\n3.  Confirm that you intend to use ICMP echo for ping and UDP ports 33434 to 33534 for traceroute.\n4.  Let the Network team know this is for monitoring with the new NOC tool.\n\nIf this doesn’t resolve the issue, please reply and let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Alex,\n\nThanks, we have your ticket. I understand: User requesting firewall rule to allow ping and traceroute to monitoring server..\nThis needs a specialist, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L2 queue",
+  "escalation_note": "Escalated to L2 by ticketdesk. Category: firewall_change. Urgency: normal. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: User requesting firewall rule to allow ping and traceroute to monitoring server.\n\nSuggested fix:\nOkay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  Collect the five facts:\n    *   Source: New York office (specify subnet if possible).\n    *   Destination: Monitoring server in Philadelphia (IP address).\n    *   Ports & Protocol: ICMP echo for ping, UDP 33434 to 33534 for traceroute.\n    *   Direction: From New York to Philadelphia.\n    *   Business Reason: NOC tool monitoring.\n2.  Check whether the rule already exists: The Network team should check the current firewall configuration. If the rule exists, reply with the existing configuration and close the ticket.\n3.  Write the change: The Network team should document the change on the firewall change template (OneNote) including the five facts, the impact (allowing ping and traceroute), and a backout plan (reverting the rule).\n4.  Schedule Review: The change should be added to the weekly review meeting agenda.\n\nEscalate if: the firewall team cannot confirm the rule doesn't exist or the change cannot be implemented within the standard process.\n\nRunbooks: firewall-change.md, printer.md, access-requests.md\n",
+  "outcome": "escalated_L2",
+  "agent_notes": [
+   "intake INC-1025",
+   "triage firewall_change L2 0.95",
+   "kb ['firewall-change.md', 'printer.md', 'access-requests.md']"
+  ]
+ },
+ {
+  "id": "INC-1026",
+  "subject": "Open port 8443 for vendor appliance",
+  "body": "Vendor needs inbound 8443 to the new appliance in the PA data closet from their support range.",
+  "requester": "nina.petrov@northline.com",
+  "created": "2026-09-25T16:08",
+  "status": "escalated_L3",
+  "stage": "done",
+  "expected": {
+   "category": "firewall_change",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T16:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:34:33",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:34:35",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:34:35",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:34:42",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:34:45",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:34:46",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:34:46",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:34:46",
+    "event": "escalated to L3"
+   },
+   {
+    "at": "2026-09-26T01:34:46",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "network",
+   "level": "L3",
+   "urgency": "normal",
+   "confidence": 0.95,
+   "summary": "Network request to open port 8443 for vendor appliance access.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 10.44
+   },
+   {
+    "title": "Firewall change requests",
+    "path": "firewall-change.md",
+    "score": 10.52
+   },
+   {
+    "title": "Laptops, monitors, docks and phones",
+    "path": "hardware.md",
+    "score": 9.43
+   }
+  ],
+  "solution": "Okay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  **Confirm Scope (2 mins):** Service Desk – Immediately confirm with the vendor the exact number of users affected, the specific office and floor, whether they are on wired or Wi-Fi, and when the issue started.\n2.  **Declare Incident (2 mins):** Service Desk – Open incident ticket # [Insert Ticket Number Here], post an update in the #it-status Teams channel detailing the issue and the next update time (30 minutes).\n3.  **Firewall Change Request:** Network Team (L2) – Initiate a Firewall Change Request following the `firewall-change.md` runbook. This will require gathering the five facts: source (vendor’s office/subnet), destination (server and IP), ports and protocol (TCP 8443), direction (inbound), and the business reason (vendor access).\n4.  **Update Firewall:** Network Team (L2) – Write the change on the firewall change template (OneNote) with the five facts, the impact, and a backout plan.\n5.  **Review & Approval:** Network Team (L2) – Put the change on the weekly review meeting agenda.\n\nEscalate if: Any issues with the firewall change process or if the vendor requires access from the internet.",
+  "draft": "Hi Nina,\n\nOkay, we’ve identified the steps to open port 8443 for your vendor’s appliance.\n\nHere’s what you can do:\n\n1.  Please confirm with your vendor the exact number of users affected, the specific office and floor, whether they are on wired or Wi-Fi, and when the issue started.\n2.  We’ve opened incident ticket #[Insert Ticket Number Here] and posted an update in the #it-status Teams channel.\n3.  The Network Team will be initiating a Firewall Change Request following the firewall-change.md runbook.\n\nIf this doesn’t resolve the issue, please reply to this ticket and let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Nina,\n\nThanks, we have your ticket. I understand: Network request to open port 8443 for vendor appliance access..\nThis needs the incident team, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L3 queue",
+  "escalation_note": "Escalated to L3 by ticketdesk. Category: network. Urgency: normal. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: Network request to open port 8443 for vendor appliance access.\n\nSuggested fix:\nOkay, here’s the fix for the ticket, based on the provided runbooks:\n\n1.  **Confirm Scope (2 mins):** Service Desk – Immediately confirm with the vendor the exact number of users affected, the specific office and floor, whether they are on wired or Wi-Fi, and when the issue started.\n2.  **Declare Incident (2 mins):** Service Desk – Open incident ticket # [Insert Ticket Number Here], post an update in the #it-status Teams channel detailing the issue and the next update time (30 minutes).\n3.  **Firewall Change Request:** Network Team (L2) – Initiate a Firewall Change Request following the `firewall-change.md` runbook. This will require gathering the five facts: source (vendor’s office/subnet), destination (server and IP), ports and protocol (TCP 8443), direction (inbound), and the business reason (vendor access).\n4.  **Update Firewall:** Network Team (L2) – Write the change on the firewall change template (OneNote) with the five facts, the impact, and a backout plan.\n5.  **Review & Approval:** Network Team (L2) – Put the change on the weekly review meeting agenda.\n\nEscalate if: Any issues with the firewall change process or if the vendor requires access from the internet.\n\nRunbooks: network-and-outage.md, firewall-change.md, hardware.md\n",
+  "outcome": "escalated_L3",
+  "agent_notes": [
+   "intake INC-1026",
+   "triage network L3 0.95",
+   "kb ['network-and-outage.md', 'firewall-change.md', 'hardware.md']"
+  ]
+ },
+ {
+  "id": "INC-1027",
+  "subject": "Wi-Fi down on the whole 3rd floor",
+  "body": "Nobody on the 3rd floor in New York can get on Wi-Fi since about 9am. Wired desks work.",
+  "requester": "paul.walker@northline.com",
+  "created": "2026-09-25T17:08",
+  "status": "escalated_L3",
+  "stage": "done",
+  "expected": {
+   "category": "network",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T17:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:34:46",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:34:48",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:34:48",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:34:55",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:34:58",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:34:58",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:34:58",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:34:58",
+    "event": "escalated to L3"
+   },
+   {
+    "at": "2026-09-26T01:34:58",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "network",
+   "level": "L3",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "Wi-Fi outage affecting all users on the 3rd floor in New York.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 23.8
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 15.23
+   },
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 7.87
+   }
+  ],
+  "solution": "Okay, let’s address this Wi-Fi outage on the 3rd floor.\n\n1.  **Confirm Scope (2 mins):** Please ask the user for a precise count of affected users, the specific offices on the 3rd floor in New York, and whether they are using Wi-Fi or wired connections. Also, confirm when the outage started (9am).\n2.  **Declare Incident (5 mins):** Open ticket # [Insert Ticket Number Here] and post an update in the #it-status Teams channel stating: “Wi-Fi outage affecting all users on the 3rd floor in New York since approximately 9:00 AM. Investigating.” Schedule the next update in 30 minutes.\n3.  **Floor AP Check (15 mins):** The Network team needs to investigate the floor access points and the controller for the 3rd floor. A power cycle of the floor switch is a last resort and should be handled by the Network team.\n4.  **Check Site Link (15 mins):** The Network team should check the site link (ISP status page and the link monitor) for any issues.\n5.  **Vendor Status (10 mins):** Before any further action, the Network team should check the vendor status pages (status.office.com, status.freshservice.com) to rule out a wider service disruption.\n\nEscalate if: The issue persists after the Network team has checked the access points, controller, site link, and vendor status pages.",
+  "draft": "Hi Paul,\n\nI understand you’re experiencing a Wi-Fi outage on the 3rd floor in New York.\n\nHere’s what you can do:\n\n1.  Please count the number of users affected and list the specific offices on the 3rd floor.\n2.  Confirm the outage started at 9:00 AM.\n3.  Post an update in the #it-status Teams channel stating “Wi-Fi outage affecting all users on the 3rd floor in New York since approximately 9:00 AM. Investigating.”\n\nIf this doesn’t resolve the issue, please reply to this ticket and let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Paul,\n\nThanks, we have your ticket. I understand: Wi-Fi outage affecting all users on the 3rd floor in New York..\nThis needs the incident team, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L3 queue",
+  "escalation_note": "Escalated to L3 by ticketdesk. Category: network. Urgency: high. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: Wi-Fi outage affecting all users on the 3rd floor in New York.\n\nSuggested fix:\nOkay, let’s address this Wi-Fi outage on the 3rd floor.\n\n1.  **Confirm Scope (2 mins):** Please ask the user for a precise count of affected users, the specific offices on the 3rd floor in New York, and whether they are using Wi-Fi or wired connections. Also, confirm when the outage started (9am).\n2.  **Declare Incident (5 mins):** Open ticket # [Insert Ticket Number Here] and post an update in the #it-status Teams channel stating: “Wi-Fi outage affecting all users on the 3rd floor in New York since approximately 9:00 AM. Investigating.” Schedule the next update in 30 minutes.\n3.  **Floor AP Check (15 mins):** The Network team needs to investigate the floor access points and the controller for the 3rd floor. A power cycle of the floor switch is a last resort and should be handled by the Network team.\n4.  **Check Site Link (15 mins):** The Network team should check the site link (ISP status page and the link monitor) for any issues.\n5.  **Vendor Status (10 mins):** Before any further action, the Network team should check the vendor status pages (status.office.com, status.freshservice.com) to rule out a wider service disruption.\n\nEscalate if: The issue persists after the Network team has checked the access points, controller, site link, and vendor status pages.\n\nRunbooks: network-and-outage.md, printer.md, security-phishing.md\n",
+  "outcome": "escalated_L3",
+  "agent_notes": [
+   "intake INC-1027",
+   "triage network L3 0.95",
+   "kb ['network-and-outage.md', 'printer.md', 'security-phishing.md']"
+  ]
+ },
+ {
+  "id": "INC-1028",
+  "subject": "Philadelphia office cannot reach the file server",
+  "body": "Everyone in Philadelphia gets a timeout opening the file server. New York is fine. Started 20 minutes ago.",
+  "requester": "rachel.diaz@northline.com",
+  "created": "2026-09-25T18:08",
+  "status": "new",
+  "stage": "waiting",
+  "expected": {
+   "category": "network",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T18:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:29:38",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:29:41",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:29:41",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:29:47",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:29:50",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:29:50",
+    "event": "stage: waiting"
+   }
+  ],
+  "triage": {
+   "category": "network",
+   "level": "L3",
+   "urgency": "high",
+   "confidence": 0.85,
+   "summary": "Philadelphia users are experiencing timeouts when accessing the file server.",
+   "missing_info": [
+    "Can you confirm the file server name and IP address?",
+    "What applications are users attempting to access?",
+    "Are all Philadelphia users affected, or just a subset?"
+   ],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 10.71
+   },
+   {
+    "title": "Printing and scanning on office printers",
+    "path": "printer.md",
+    "score": 13.53
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 12.46
+   }
+  ],
+  "solution": "Okay, here’s the fix plan for the Philadelphia file server timeout issue, based on the provided runbooks:\n\n1.  **Confirm Scope (Network Team - 2 mins):** Immediately, the Network team needs to confirm the scope of the issue. This includes: how many Philadelphia users are affected, which office and floor, whether they are on wired or Wi-Fi, and when the issue started. Rule out a single user issue first.\n2.  **Declare Incident (Service Desk - Immediate):** Open an incident ticket and post an update in the #it-status Teams channel stating the issue and the next update time (30 minutes).\n3.  **Site Link Check (Network Team - 30 mins):** The Network team should check the site link status via the ISP status page and the link monitor to rule out any connectivity issues.\n4.  **Power Cycle Floor Switch (Network Team - 30 mins):** If the site link check is clear, the Network team should proceed with a power cycle of the floor switch as a last resort.\n\nEscalate if: The issue persists after confirming scope, checking the site link, and power cycling the floor switch.",
+  "draft": "Hi Rachel,\n\nI understand you’re experiencing timeouts when accessing the file server in Philadelphia.\n\nHere’s what you can do:\n\n1.  Please confirm how many Philadelphia users are affected and if they’re on wired or Wi-Fi.\n2.  Post an update in the #it-status Teams channel stating the issue and when we’ll provide another update (within 30 minutes).\n3.  The Network team will check the site link status and power cycle the floor switch if needed.\n\nIf this doesn’t resolve the issue, please reply to this ticket and let us know.\n\nIT Service Desk",
+  "decision": "review"
+ },
+ {
+  "id": "INC-1029",
+  "subject": "Email is down for everyone",
+  "body": "Nobody can send or receive email, the whole office is affected. Outlook and webmail both fail.",
+  "requester": "steve.hall@northline.com",
+  "created": "2026-09-25T19:08",
+  "status": "escalated_L3",
+  "stage": "done",
+  "expected": {
+   "category": "outage",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T19:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:34:58",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:35:00",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:35:00",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:35:05",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:35:08",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:35:08",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:35:08",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:35:09",
+    "event": "escalated to L3"
+   },
+   {
+    "at": "2026-09-26T01:35:09",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "email",
+   "level": "L3",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "Multiple users unable to send or receive email due to a widespread outage.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Outlook and mailbox problems",
+    "path": "outlook-email.md",
+    "score": 9.94
+   },
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 13.24
+   },
+   {
+    "title": "Server disk full, failed jobs, one service down",
+    "path": "server-disk-and-jobs.md",
+    "score": 9.73
+   }
+  ],
+  "solution": "Okay, here’s the fix for the email outage ticket, based on the provided runbooks:\n\n1.  Check vendor status pages: Immediately check status.office.com and status.freshservice.com for any reported outages.\n2.  Confirm scope: Within two minutes, confirm the number of affected users, the specific offices/floors impacted, and whether it’s wired or Wi-Fi.\n3.  Compare with webmail: Verify if webmail (outlook.office.com) is also affected. If not, the issue is likely within the Outlook app on the affected users’ laptops.\n4.  Update every 30 minutes: Update the ticket with findings every 30 minutes until a resolution is identified.\n\nEscalate if: Webmail is also failing for more than one person (outage, L3), or a mailbox is over its size limit and needs an archive change (L2).",
+  "draft": "Hi Steve,\n\nWe’re aware that everyone is currently unable to send or receive email.\n\nHere’s what you can try:\n\n1.  Check status.office.com and status.freshservice.com for any reported outages.\n2.  Let us know the number of affected users, the offices impacted, and whether they’re using wired or Wi-Fi.\n3.  Confirm if webmail (outlook.office.com) is also down.\n\nIf these steps don’t resolve the issue, please reply to this ticket and let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Steve,\n\nThanks, we have your ticket. I understand: Multiple users unable to send or receive email due to a widespread outage..\nThis needs the incident team, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L3 queue",
+  "escalation_note": "Escalated to L3 by ticketdesk. Category: email. Urgency: high. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: Multiple users unable to send or receive email due to a widespread outage.\n\nSuggested fix:\nOkay, here’s the fix for the email outage ticket, based on the provided runbooks:\n\n1.  Check vendor status pages: Immediately check status.office.com and status.freshservice.com for any reported outages.\n2.  Confirm scope: Within two minutes, confirm the number of affected users, the specific offices/floors impacted, and whether it’s wired or Wi-Fi.\n3.  Compare with webmail: Verify if webmail (outlook.office.com) is also affected. If not, the issue is likely within the Outlook app on the affected users’ laptops.\n4.  Update every 30 minutes: Update the ticket with findings every 30 minutes until a resolution is identified.\n\nEscalate if: Webmail is also failing for more than one person (outage, L3), or a mailbox is over its size limit and needs an archive change (L2).\n\nRunbooks: outlook-email.md, network-and-outage.md, server-disk-and-jobs.md\n",
+  "outcome": "escalated_L3",
+  "agent_notes": [
+   "intake INC-1029",
+   "triage email L3 0.95",
+   "kb ['outlook-email.md', 'network-and-outage.md', 'server-disk-and-jobs.md']"
+  ]
+ },
+ {
+  "id": "INC-1030",
+  "subject": "Freshservice portal down for all users",
+  "body": "The support portal returns a 503 for all users in both offices. We cannot log tickets.",
+  "requester": "julia.king@northline.com",
+  "created": "2026-09-25T20:08",
+  "status": "escalated_L3",
+  "stage": "done",
+  "expected": {
+   "category": "outage",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T20:08",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-26T01:28:30",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-26T01:28:43",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-26T01:28:43",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-26T01:28:49",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-26T01:28:51",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-26T01:28:51",
+    "event": "stage: escalate"
+   },
+   {
+    "at": "2026-09-26T01:28:51",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-26T01:28:51",
+    "event": "escalated to L3"
+   },
+   {
+    "at": "2026-09-26T01:28:51",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "other",
+   "level": "L3",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "Freshservice portal is unavailable for all users.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Network problems for a floor or office, and outages",
+    "path": "network-and-outage.md",
+    "score": 11.78
+   },
+   {
+    "title": "Password reset and locked accounts",
+    "path": "password-reset.md",
+    "score": 8.16
+   },
+   {
+    "title": "Server disk full, failed jobs, one service down",
+    "path": "server-disk-and-jobs.md",
+    "score": 7.49
+   }
+  ],
+  "solution": "Okay, here’s the fix plan for the Freshservice portal outage, based on the provided runbooks:\n\n1.  **Confirm Scope (2 mins):** Service Desk – Immediately confirm the number of affected users, which offices and floors are impacted, and whether they are using wired or Wi-Fi connections. Verify that at least one user can access the portal to rule out a single-user issue.\n2.  **Declare Incident (2 mins):** Service Desk – Open an incident ticket and post an update in the #it-status Teams channel detailing the issue and the next update time (30 minutes).\n3.  **Vendor Status Check (5 mins):** Service Desk – Immediately check the Freshservice status page (status.freshservice.com) and Office status page (status.office.com) for any reported outages.\n4.  **Re-direct to Self-Service (5 mins):** Service Desk – If the vendor status page shows no issues, instruct the user to attempt a password reset through the Freshservice portal, following the standard \"Forgot Password\" flow, including MFA.\n\nEscalate if: The vendor status page indicates a Freshservice outage, or after 30 minutes there is no resolution.",
+  "draft": "Hi Julia,\n\nWe’ve received your report about the Freshservice portal being down.\n\nHere’s what you can do:\n\n1.  Confirm with a colleague if they can access the portal.\n2.  Try resetting your password through the Freshservice portal following the “Forgot Password” flow, including MFA.\n3.  If you’re still unable to access the portal, please reply to this email and let us know.\n\nIT Service Desk",
+  "decision": "escalate",
+  "reply": "Hi Julia,\n\nThanks, we have your ticket. I understand: Freshservice portal is unavailable for all users..\nThis needs the incident team, so I have passed it on with the details and it is being worked. You will hear back on this ticket.\n\nIT Service Desk",
+  "assigned": "L3 queue",
+  "escalation_note": "Escalated to L3 by ticketdesk. Category: other. Urgency: high. Confidence 0.95 (ollama:gemma3:4b).\n\nSummary: Freshservice portal is unavailable for all users.\n\nSuggested fix:\nOkay, here’s the fix plan for the Freshservice portal outage, based on the provided runbooks:\n\n1.  **Confirm Scope (2 mins):** Service Desk – Immediately confirm the number of affected users, which offices and floors are impacted, and whether they are using wired or Wi-Fi connections. Verify that at least one user can access the portal to rule out a single-user issue.\n2.  **Declare Incident (2 mins):** Service Desk – Open an incident ticket and post an update in the #it-status Teams channel detailing the issue and the next update time (30 minutes).\n3.  **Vendor Status Check (5 mins):** Service Desk – Immediately check the Freshservice status page (status.freshservice.com) and Office status page (status.office.com) for any reported outages.\n4.  **Re-direct to Self-Service (5 mins):** Service Desk – If the vendor status page shows no issues, instruct the user to attempt a password reset through the Freshservice portal, following the standard \"Forgot Password\" flow, including MFA.\n\nEscalate if: The vendor status page indicates a Freshservice outage, or after 30 minutes there is no resolution.\n\nRunbooks: network-and-outage.md, password-reset.md, server-disk-and-jobs.md\n",
+  "outcome": "escalated_L3",
+  "agent_notes": [
+   "intake INC-1030",
+   "triage other L3 0.95",
+   "kb ['network-and-outage.md', 'password-reset.md', 'server-disk-and-jobs.md']"
+  ]
+ },
+ {
+  "id": "INC-1031",
+  "subject": "Locked out after too many password tries",
+  "body": "I typed my password wrong a few times and now my account is locked. I have a client call at 10, New York office.",
+  "requester": "judge@northline.com",
+  "created": "2026-09-25T21:49:41",
+  "status": "auto_replied",
+  "stage": "done",
+  "history": [
+   {
+    "at": "2026-09-25T21:49:41",
+    "event": "created"
+   },
+   {
+    "at": "2026-09-25T21:49:41",
+    "event": "stage: triage"
+   },
+   {
+    "at": "2026-09-25T21:50:41",
+    "event": "stage: retrieve"
+   },
+   {
+    "at": "2026-09-25T21:50:41",
+    "event": "stage: solve"
+   },
+   {
+    "at": "2026-09-25T21:50:51",
+    "event": "stage: draft"
+   },
+   {
+    "at": "2026-09-25T21:50:58",
+    "event": "stage: gate"
+   },
+   {
+    "at": "2026-09-25T21:50:58",
+    "event": "stage: auto_send"
+   },
+   {
+    "at": "2026-09-25T21:50:58",
+    "event": "auto reply sent"
+   },
+   {
+    "at": "2026-09-25T21:50:58",
+    "event": "stage: done"
+   }
+  ],
+  "triage": {
+   "category": "password",
+   "level": "L1",
+   "urgency": "high",
+   "confidence": 0.95,
+   "summary": "User account locked due to multiple incorrect password attempts.",
+   "missing_info": [],
+   "model": "ollama:gemma3:4b"
+  },
+  "hits": [
+   {
+    "title": "Password reset and locked accounts",
+    "path": "password-reset.md",
+    "score": 20.96
+   },
+   {
+    "title": "Phishing, suspicious email, clicked a link, lost device",
+    "path": "security-phishing.md",
+    "score": 15.02
+   },
+   {
+    "title": "How do I ... Microsoft 365 and Teams",
+    "path": "how-to-microsoft-365.md",
+    "score": 14.49
+   }
+  ],
+  "solution": "Okay, here’s the fix for the ticket, following the provided runbooks:\n\n1.  **Confirm Identity:** Call the user back using the number in the directory.\n2.  **Self-Service Reset:** Send the user to the password portal (https://password.northline.com) and guide them through the “Forgot password” process, including obtaining and entering the MFA code.\n3.  **Unlock Account:** Unlock the account in the admin console (Users > search > Unlock).\n4.  **Cache Password:** Ask the user to sign out and back in on their laptop while connected to the office network or VPN.\n5.  **Note & Close:** Document the steps taken in the ticket and close it.\n\nEscalate if: the requester did not ask for the reset (possible breach), the account is a service or admin account, or the lock repeats within a day (security, L2).",
+  "draft": "Hi Judge,\n\nI understand you’re locked out after entering your password incorrectly a few times.\n\nHere’s what you can do:\n\n1.  Go to the password portal at https://password.northline.com and follow the “Forgot password” instructions, including entering your MFA code.\n2.  Once you’ve reset your password, unlock your account in the admin console (Users > search > Unlock).\n3.  Sign out and back into your laptop while connected to the office network or VPN.\n\nIf this doesn’t work, please reply to this ticket and let us know. \n\nIT Service Desk",
+  "decision": "auto",
+  "reply": "Hi Judge,\n\nI understand you’re locked out after entering your password incorrectly a few times.\n\nHere’s what you can do:\n\n1.  Go to the password portal at https://password.northline.com and follow the “Forgot password” instructions, including entering your MFA code.\n2.  Once you’ve reset your password, unlock your account in the admin console (Users > search > Unlock).\n3.  Sign out and back into your laptop while connected to the office network or VPN.\n\nIf this doesn’t work, please reply to this ticket and let us know. \n\nIT Service Desk\n\n[sent automatically, L1 runbook answer]",
+  "outcome": "auto_replied",
+  "agent_notes": [
+   "intake INC-1031",
+   "triage password L1 0.95",
+   "kb ['password-reset.md', 'security-phishing.md', 'how-to-microsoft-365.md']"
+  ]
+ }
+]

@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ticketdesk</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%235B9DFF'/%3E%3Cpath d='M6 12h4M10 12V7h6M10 12v5h6' stroke='%230A0C11' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0A0C11; --panel:#12151D; --sunk:#0D1016; --raise:#171B25;
+  --line:#232936; --line-soft:#1A1F2A;
+  --text:#E9ECF2; --dim:#98A1B2; --faint:#68717F;
+  --signal:#5B9DFF; --signal-ink:#08101F; --signal-soft:#132444;
+  --l1:#2FD07E; --l2:#FFAE35; --l3:#FF6360; --human:#B98BFF;
+  --code-bg:#080A0F; --code-line:#1A1F2C;
+  --f:ui-sans-serif,"Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+  --m:ui-monospace,"Cascadia Mono","Cascadia Code",SFMono-Regular,Consolas,Menlo,monospace;
+  --r:6px; --ease:cubic-bezier(.2,.7,.3,1);
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#F4F6F9; --panel:#FFFFFF; --sunk:#EDF0F5; --raise:#FFFFFF;
+  --line:#DFE4EC; --line-soft:#EAEDF3;
+  --text:#0D1117; --dim:#5A6474; --faint:#8C96A6;
+  --signal:#1F6FEB; --signal-ink:#FFFFFF; --signal-soft:#E4EDFD;
+  --l1:#0F8B50; --l2:#9A5A00; --l3:#C3312C; --human:#6F34C4;
+  --code-bg:#F7F9FC; --code-line:#E3E8F0;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 13.5px/1.5 var(--f);-webkit-font-smoothing:antialiased;
+     display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:3px}
+.mono{font-family:var(--m)}
+.num{font-variant-numeric:tabular-nums}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- header ---------- */
+header{display:flex;align-items:center;gap:10px;padding:0 14px;height:50px;
+       border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;margin-right:4px}
+.brand svg{width:20px;height:20px;color:var(--signal)}
+.brand b{font-size:15px;font-weight:650;letter-spacing:-.02em}
+.tag{font:500 11px var(--m);border:1px solid var(--line);border-radius:4px;padding:3px 7px;
+     color:var(--faint);white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+.tag b{color:var(--text);font-weight:500}
+.tag.on{color:var(--l1);border-color:color-mix(in srgb,var(--l1) 45%,transparent)}
+.tag.off{color:var(--l3);border-color:color-mix(in srgb,var(--l3) 45%,transparent)}
+.tag .d{width:5px;height:5px;border-radius:50%;background:currentColor}
+.sp{margin-left:auto;display:flex;gap:7px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:var(--r);
+     padding:6px 11px;font-size:12.5px;font-weight:500;transition:background .12s var(--ease),border-color .12s var(--ease),transform .09s var(--ease)}
+.btn:hover{background:var(--raise);border-color:var(--faint)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+.btn.primary{background:var(--signal);color:var(--signal-ink);border-color:transparent;font-weight:600}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn.danger{color:var(--l3);border-color:color-mix(in srgb,var(--l3) 40%,transparent)}
+.btn.good{color:var(--l1);border-color:color-mix(in srgb,var(--l1) 45%,transparent)}
+.btn kbd{margin-left:6px;font:500 10px var(--m);opacity:.55;border:1px solid currentColor;border-radius:3px;padding:0 3px}
+.icon{width:30px;height:30px;padding:0;display:grid;place-items:center;border:0;background:transparent;color:var(--dim);border-radius:var(--r)}
+.icon:hover{background:var(--raise);color:var(--text)}
+.icon svg{width:15px;height:15px}
+
+/* ---------- summary strip ---------- */
+.strip{display:flex;align-items:center;gap:14px;padding:9px 14px;border-bottom:1px solid var(--line);
+       background:var(--sunk);flex-wrap:wrap}
+.meter{flex:1;min-width:180px;height:8px;border-radius:5px;background:var(--line-soft);overflow:hidden;display:flex}
+.meter i{display:block;height:100%;transition:width .45s var(--ease)}
+.meter i.a{background:var(--l1)} .meter i.e2{background:var(--l2)} .meter i.e3{background:var(--l3)}
+.meter i.w{background:var(--human)} .meter i.n{background:var(--line)}
+.key{display:flex;gap:13px;flex-wrap:wrap;font:500 11px var(--m);color:var(--dim)}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{width:7px;height:7px;border-radius:2px;display:inline-block}
+.work{font:500 11px var(--m);color:var(--dim);display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.work::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--faint)}
+.work.busy::before{background:var(--signal);animation:blip 1s ease-in-out infinite}
+@keyframes blip{50%{opacity:.25}}
+
+/* ---------- panes ---------- */
+main{display:grid;grid-template-columns:330px minmax(0,1fr);min-height:0}
+@media (max-width:880px){main{grid-template-columns:1fr}#detail{display:none}
+  body.picked main{grid-template-columns:1fr}body.picked #queue{display:none}body.picked #detail{display:block}}
+#queue{border-right:1px solid var(--line);overflow-y:auto;min-height:0;background:var(--panel)}
+.row{position:relative;padding:10px 12px 10px 15px;border-bottom:1px solid var(--line-soft);cursor:pointer;
+     display:grid;gap:5px;transition:background .12s var(--ease)}
+.row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line)}
+.row.L1::before{background:var(--l1)} .row.L2::before{background:var(--l2)} .row.L3::before{background:var(--l3)}
+.row:hover{background:var(--raise)}
+.row.sel{background:var(--signal-soft)}
+.row.sel::before{width:3px}
+.row .top{display:flex;align-items:center;gap:8px}
+.row .id{font:500 10.5px var(--m);color:var(--faint)}
+.row .subj{font-size:13px;font-weight:500;line-height:1.35;color:var(--text)}
+.row .who{font:400 11px var(--m);color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row.new-in{animation:slidein .28s var(--ease)}
+@keyframes slidein{from{opacity:0;transform:translateY(-6px)}}
+.lvl{font:700 10px/1 var(--m);padding:3px 5px;border-radius:3px;letter-spacing:.03em}
+.lvl.L1{background:color-mix(in srgb,var(--l1) 16%,transparent);color:var(--l1)}
+.lvl.L2{background:color-mix(in srgb,var(--l2) 16%,transparent);color:var(--l2)}
+.lvl.L3{background:color-mix(in srgb,var(--l3) 16%,transparent);color:var(--l3)}
+.st{font:500 10.5px var(--m);display:inline-flex;align-items:center;gap:5px;color:var(--faint);
+    border:1px solid var(--line);border-radius:999px;padding:2px 7px;white-space:nowrap}
+.st::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;flex:none}
+.st.auto_replied{color:var(--l1);border-color:color-mix(in srgb,var(--l1) 40%,transparent)}
+.st.replied{color:var(--signal);border-color:color-mix(in srgb,var(--signal) 40%,transparent)}
+.st.escalated_L2{color:var(--l2);border-color:color-mix(in srgb,var(--l2) 40%,transparent)}
+.st.escalated_L3{color:var(--l3);border-color:color-mix(in srgb,var(--l3) 40%,transparent)}
+.st.skipped{color:var(--faint);opacity:.75}
+.st.waiting{color:var(--human);border-color:color-mix(in srgb,var(--human) 45%,transparent)}
+.st.waiting::before{animation:blip 1.1s ease-in-out infinite}
+.st.working{color:var(--signal);border-color:color-mix(in srgb,var(--signal) 40%,transparent)}
+.st.working::before{animation:blip .8s ease-in-out infinite}
+.bars{display:flex;gap:3px;margin-top:2px}
+.bars i{flex:1;height:3px;border-radius:2px;background:var(--line)}
+.bars i.done{background:var(--signal)}
+.bars i.now{background:var(--signal);animation:blip .8s ease-in-out infinite}
+
+/* ---------- detail ---------- */
+#detail{overflow-y:auto;min-height:0;padding:16px 18px 40px;display:grid;gap:13px;align-content:start}
+.card{border:1px solid var(--line);border-radius:9px;background:var(--panel);padding:14px 16px}
+.card h3{margin:0 0 9px;font:500 9.5px var(--m);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.card pre{margin:0;white-space:pre-wrap;font:400 12.5px/1.6 var(--m);color:var(--text)}
+.hdr{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.hdr h2{margin:7px 0 3px;font-size:19px;font-weight:650;letter-spacing:-.02em;line-height:1.25}
+.meta{font:400 11.5px var(--m);color:var(--faint)}
+.body{margin-top:9px;white-space:pre-wrap;color:var(--dim);font-size:13.5px}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:6px 12px;font-size:12.5px;align-items:center}
+.kv>div:nth-child(odd){font:500 10.5px var(--m);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.conf{display:flex;align-items:center;gap:9px}
+.conf .bar{flex:1;height:5px;border-radius:3px;background:var(--line-soft);overflow:hidden;max-width:150px}
+.conf .bar i{display:block;height:100%;background:var(--signal);transition:width .45s var(--ease)}
+.why{border-left:2px solid var(--signal);padding:8px 11px;background:var(--signal-soft);
+     border-radius:0 var(--r) var(--r) 0;font-size:12.5px;margin-top:11px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+.hit{display:flex;gap:9px;align-items:baseline;font-size:12.5px;padding:3px 0;color:var(--dim)}
+.hit b{color:var(--text);font-weight:500}
+.hit code{font:400 11px var(--m);color:var(--faint)}
+textarea{width:100%;min-height:210px;resize:vertical;background:var(--code-bg);color:var(--text);
+         border:1px solid var(--code-line);border-radius:var(--r);padding:11px 12px;font:400 12.5px/1.6 var(--m)}
+input[type=text],input:not([type]){width:100%;background:var(--code-bg);color:var(--text);border:1px solid var(--code-line);
+       border-radius:var(--r);padding:8px 11px;font:400 13px var(--f)}
+input::placeholder{color:var(--faint)}
+.acts{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.wait-card{border-color:var(--human);box-shadow:0 0 0 1px color-mix(in srgb,var(--human) 30%,transparent)}
+.wait-card h3{color:var(--human)}
+.hist{font:400 11.5px/1.7 var(--m);color:var(--faint)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:500 10.5px var(--m);border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--dim)}
+.chip.bad{color:var(--l3);border-color:color-mix(in srgb,var(--l3) 45%,transparent)}
+.empty{display:grid;place-content:center;gap:8px;text-align:center;color:var(--faint);height:100%;padding:40px}
+.empty svg{width:34px;height:34px;justify-self:center;opacity:.5}
+.empty b{color:var(--dim);font-weight:500;font-size:14px}
+.empty span{font:400 12px var(--m)}
+
+/* ---------- new ticket dialog ---------- */
+dialog{border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--text);
+       width:min(560px,92vw);padding:0;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+dialog::backdrop{background:rgba(4,6,10,.62);backdrop-filter:blur(3px)}
+dialog form{padding:18px}
+dialog h3{margin:0 0 4px;font-size:16px;font-weight:650;letter-spacing:-.01em}
+dialog p.sub{margin:0 0 14px;color:var(--dim);font-size:12.5px}
+dialog label{display:block;font:500 10px var(--m);letter-spacing:.11em;text-transform:uppercase;color:var(--faint);margin:11px 0 5px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--raise);
+       border:1px solid var(--line);border-radius:999px;padding:8px 15px;font:500 12px var(--m);
+       box-shadow:0 14px 40px -18px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-3px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="1.2" y="8.4" width="6.2" height="7.2" rx="1.6" stroke="currentColor" stroke-width="1.7"/>
+      <rect x="16.6" y="2.2" width="6.2" height="7.2" rx="1.6" stroke="currentColor" stroke-width="1.7"/>
+      <rect x="16.6" y="14.6" width="6.2" height="7.2" rx="1.6" stroke="currentColor" stroke-width="1.7"/>
+      <path d="M7.4 12h4.2M11.6 12V5.8h5M11.6 12v6.2h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </svg><b>ticketdesk</b>
+  </div>
+  <span class="tag">triage <b id="mT">...</b></span>
+  <span class="tag">draft <b id="mD">...</b></span>
+  <span class="tag" id="cAuto"><span class="d"></span>auto reply</span>
+  <span class="tag" id="cEsc"><span class="d"></span>auto escalate</span>
+  <span class="tag">gate <b id="cThr">...</b></span>
+  <div class="sp">
+    <button class="btn" id="bAdd">New ticket<kbd>N</kbd></button>
+    <button class="btn primary" id="bRun">Run agent<kbd>R</kbd></button>
+    <button class="btn danger" id="bReset">Reset</button>
+    <button class="icon" id="bTheme" title="Theme" aria-label="Switch theme"></button>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="meter" id="meter" aria-label="Queue state"></div>
+  <div class="key" id="key"></div>
+  <span class="work" id="work">idle</span>
+</div>
+
+<main>
+  <section id="queue" aria-label="Ticket queue"></section>
+  <section id="detail"></section>
+</main>
+
+<dialog id="dlg">
+  <form id="fNew" method="dialog">
+    <h3>New ticket</h3>
+    <p class="sub">Type it the way a requester would. It goes through the same graph as the rest.</p>
+    <label for="f-req">Requester</label>
+    <input id="f-req" name="requester" value="judge@northline.com">
+    <label for="f-sub">Subject</label>
+    <input id="f-sub" name="subject" required placeholder="Printer on 4th floor not printing">
+    <label for="f-body">What is wrong</label>
+    <textarea id="f-body" name="body" required style="min-height:110px" placeholder="Job shows as sent but nothing comes out. Other people can print."></textarea>
+    <div class="acts">
+      <button class="btn primary" value="ok">Create and run</button>
+      <button class="btn" value="cancel" formnovalidate>Cancel</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const STAGES=['triage','retrieve','solve','draft','gate'];
+const WORKING=new Set(['triage','retrieve','solve','draft','gate','auto_send','escalate']);
+let S={tickets:[],config:{},calls:[],counts:{}}, sel=null, editing=false, rowSig=new Map(), detSig='', resetArm=0;
+
+/* ---------- theme ---------- */
+const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.8v2.4M12 19.8v2.4M4 4l1.7 1.7M18.3 18.3L20 20M1.8 12h2.4M19.8 12h2.4M4 20l1.7-1.7M18.3 5.7L20 4"/></svg>';
+const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8z"/></svg>';
+try{const t=localStorage.getItem('td-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
+function paintTheme(){$('#bTheme').innerHTML=document.documentElement.getAttribute('data-theme')==='light'?MOON:SUN;}
+$('#bTheme').onclick=()=>{const l=document.documentElement.getAttribute('data-theme')==='light';
+  document.documentElement.setAttribute('data-theme',l?'dark':'light');
+  try{localStorage.setItem('td-theme',l?'dark':'light');}catch(e){}paintTheme();};
+paintTheme();
+
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200);}
+
+/* ---------- api ---------- */
+async function api(path,body){
+  const r=await fetch(path,body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}:{});
+  if(!r.ok){let d={};try{d=await r.json();}catch(e){}toast(d.detail||('error '+r.status));throw new Error(r.status);}
+  return r.json();
+}
+
+/* ---------- state ---------- */
+async function refresh(){
+  try{S=await api('/api/state');}catch(e){$('#work').textContent='no server';return;}
+  const c=S.config;
+  $('#mT').textContent=c.triage_model; $('#mD').textContent=c.draft_model;
+  $('#cAuto').className='tag '+(c.auto_reply?'on':'off'); $('#cAuto').innerHTML='<span class="d"></span>auto reply '+(c.auto_reply?'on':'off');
+  $('#cEsc').className='tag '+(c.auto_escalate?'on':'off'); $('#cEsc').innerHTML='<span class="d"></span>auto escalate '+(c.auto_escalate?'on':'off');
+  $('#cThr').textContent=Number(c.threshold).toFixed(2);
+  const w=$('#work');
+  w.textContent=S.busy?('working '+S.busy+(S.queued?'  +'+S.queued+' queued':'')):'idle';
+  w.className='work'+(S.busy?' busy':'');
+  paintMeter(); paintQueue(); if(!editing) paintDetail();
+}
+function paintMeter(){
+  const t=S.tickets, n=t.length||1;
+  const g={a:0,e2:0,e3:0,w:0,n:0};
+  for(const x of t){
+    if(x.stage==='waiting')g.w++;
+    else if(x.status==='auto_replied'||x.status==='replied')g.a++;
+    else if(x.status==='escalated_L2')g.e2++;
+    else if(x.status==='escalated_L3')g.e3++;
+    else g.n++;
+  }
+  $('#meter').innerHTML=['a','e2','e3','w','n'].map(k=>`<i class="${k}" style="width:${(g[k]/n*100).toFixed(2)}%"></i>`).join('');
+  $('#key').innerHTML=[['a','var(--l1)','answered',g.a],['e2','var(--l2)','to L2',g.e2],['e3','var(--l3)','to L3',g.e3],
+    ['w','var(--human)','needs a person',g.w],['n','var(--line)','untouched',g.n]]
+    .map(([k,c,l,v])=>`<span><i style="background:${c}"></i>${l} <b class="num">${v}</b></span>`).join('');
+}
+function stBadge(t){
+  if(t.stage==='waiting')return '<span class="st waiting">needs a person</span>';
+  if(WORKING.has(t.stage)&&t.status==='new')return `<span class="st working">${esc(t.stage)}</span>`;
+  const s=t.status||'new';
+  return `<span class="st ${esc(s)}">${esc(s.replace('_',' '))}</span>`;
+}
+function bars(t){
+  if(!(WORKING.has(t.stage)&&t.status==='new'))return '';
+  const i=STAGES.indexOf(t.stage);
+  return `<div class="bars">${STAGES.map((s,k)=>`<i class="${k<i?'done':k===i?'now':''}"></i>`).join('')}</div>`;
+}
+function rowHTML(t){
+  const lv=t.triage?t.triage.level:'';
+  return `<div class="top"><span class="id">${esc(t.id)}</span>${lv?`<span class="lvl ${lv}">${lv}</span>`:''}${stBadge(t)}</div>
+    <div class="subj">${esc(t.subject)}</div>
+    <div class="who">${esc(t.requester||'')}${t.triage?' · '+esc(t.triage.category):''}</div>${bars(t)}`;
+}
+function paintQueue(){
+  const q=$('#queue');
+  if(!S.tickets.length){q.innerHTML=`<div class="empty"><b>No tickets</b><span>press New ticket or Reset</span></div>`;return;}
+  const seen=new Set();
+  S.tickets.forEach((t,idx)=>{
+    seen.add(t.id);
+    const sig=JSON.stringify([t.status,t.stage,t.triage&&t.triage.level,t.triage&&t.triage.category,t.subject,t.id===sel]);
+    let el=q.querySelector(`[data-id="${CSS.escape(t.id)}"]`);
+    if(!el){
+      el=document.createElement('div');el.className='row new-in';el.dataset.id=t.id;
+      el.onclick=()=>{sel=t.id;editing=false;detSig='';document.body.classList.add('picked');paintQueue();paintDetail();};
+      q.appendChild(el);
+    }
+    if(rowSig.get(t.id)!==sig){el.innerHTML=rowHTML(t);rowSig.set(t.id,sig);}
+    const lv=t.triage?t.triage.level:'';
+    el.className='row'+(lv?' '+lv:'')+(t.id===sel?' sel':'')+(el.classList.contains('new-in')?' new-in':'');
+    if(q.children[idx]!==el)q.insertBefore(el,q.children[idx]||null);
+  });
+  [...q.children].forEach(el=>{if(el.dataset.id&&!seen.has(el.dataset.id)){el.remove();rowSig.delete(el.dataset.id);}});
+}
+function paintDetail(){
+  const d=$('#detail'), t=S.tickets.find(x=>x.id===sel);
+  if(!t){
+    if(detSig==='empty')return; detSig='empty';
+    d.innerHTML=`<div class="empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h7"/></svg>
+      <b>Pick a ticket</b><span>or press Run agent to work the queue</span></div>`;
+    return;
+  }
+  const sig=JSON.stringify([t.id,t.status,t.stage,t.draft,t.reply,t.solution,t.why,(t.history||[]).length,(S.calls||[]).length]);
+  if(sig===detSig)return; detSig=sig;
+  const tri=t.triage, idle=t.status==='new'&&t.stage!=='waiting'&&!WORKING.has(t.stage);
+  d.innerHTML=`
+   <div class="card">
+     <div class="hdr"><span class="meta">${esc(t.id)}</span>${tri?`<span class="lvl ${tri.level}">${tri.level}</span>`:''}${stBadge(t)}
+       <span style="margin-left:auto">${idle?`<button class="btn primary" id="bOne">Run this ticket</button>`:''}</span></div>
+     <h2>${esc(t.subject)}</h2>
+     <div class="meta">${esc(t.requester)} · ${esc(t.created)}</div>
+     <div class="body">${esc(t.body)}</div>
+   </div>
+   ${tri?`<div class="grid2">
+     <div class="card"><h3>Triage · ${esc(tri.model||'')}</h3>
+       <div class="kv">
+         <div>category</div><div>${esc(tri.category)}</div>
+         <div>level</div><div><span class="lvl ${tri.level}">${tri.level}</span></div>
+         <div>urgency</div><div>${esc(tri.urgency)}</div>
+         <div>confidence</div><div class="conf"><span class="num">${(tri.confidence*100).toFixed(0)}%</span>
+           <span class="bar"><i style="width:${(tri.confidence*100).toFixed(0)}%"></i></span></div>
+         <div>summary</div><div>${esc(tri.summary)}</div>
+         ${tri.missing_info&&tri.missing_info.length?`<div>ask them</div><div>${tri.missing_info.map(esc).join('<br>')}</div>`:''}
+       </div>
+       ${t.why?`<div class="why">${esc(t.why)}</div>`:''}
+     </div>
+     <div class="card"><h3>Runbooks matched</h3>
+       ${(t.hits||[]).map(h=>`<div class="hit"><b>${esc(h.title)}</b><code>${esc(h.path)} · ${h.score}</code></div>`).join('')||'<div class="hit">none</div>'}
+       ${t.solution?`<h3 style="margin-top:14px">Suggested fix · engineer view</h3><pre>${esc(t.solution)}</pre>`:''}
+     </div></div>`:''}
+   ${t.stage==='waiting'?`<div class="card wait-card"><h3>Draft reply · waiting for you</h3>
+     <textarea id="draftBox" oninput="editing=true">${esc(t.draft||'')}</textarea>
+     <input id="editNote" oninput="editing=true" style="margin-top:9px" placeholder="or tell the model what to change, then Redraft">
+     <div class="acts">
+       <button class="btn good" data-act="send">Send this reply<kbd>&#9166;</kbd></button>
+       <button class="btn" data-act="edit">Redraft with my note</button>
+       <button class="btn" data-act="escalate" data-lvl="L2">Escalate L2</button>
+       <button class="btn" data-act="escalate" data-lvl="L3">Escalate L3</button>
+       <button class="btn danger" data-act="skip">Skip</button>
+     </div></div>`:''}
+   ${t.reply?`<div class="card"><h3>${t.status==='auto_replied'?'Auto reply sent · no human touched it':'Reply sent'}</h3><pre>${esc(t.reply)}</pre></div>`:''}
+   ${t.escalation_note?`<div class="card"><h3>Private note · ${esc(t.assigned||'')}</h3><pre>${esc(t.escalation_note)}</pre></div>`:''}
+   ${t.draft&&t.stage!=='waiting'&&!t.reply?`<div class="card"><h3>Draft</h3><pre>${esc(t.draft)}</pre></div>`:''}
+   <div class="grid2">
+     <div class="card"><h3>History</h3><div class="hist">${(t.history||[]).map(h=>esc(h.at)+'  '+esc(h.event)).join('<br>')}</div></div>
+     <div class="card"><h3>Last model calls</h3><div class="chips">${(S.calls||[]).slice().reverse().slice(0,8)
+        .map(c=>`<span class="chip${c.ok?'':' bad'}">${esc(c.role)} · ${esc(c.model)} · ${c.seconds}s${c.ok?'':' failed'}</span>`).join('')||'<span class="chip">none yet</span>'}</div>
+       ${(S.errors||[]).length?`<pre style="color:var(--l3);margin-top:9px;font-size:11.5px">${S.errors.map(esc).join('\n')}</pre>`:''}
+     </div>
+   </div>`;
+  const one=$('#bOne'); if(one)one.onclick=()=>runOne(t.id);
+  d.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>decide(t.id,b.dataset.act,b.dataset.lvl));
+}
+
+/* ---------- actions ---------- */
+async function runOne(id){await api('/api/run/'+id,{});toast(id+' queued');refresh();}
+async function decide(id,action,level){
+  const text=$('#draftBox')?$('#draftBox').value:'';
+  const note=$('#editNote')?$('#editNote').value:'';
+  if(action==='edit'&&!note.trim()){toast('type what to change first');$('#editNote').focus();return;}
+  editing=false;detSig='';
+  await api(`/api/tickets/${id}/decision`,{action,text,note,level:level||''});
+  toast(action==='send'?'reply sent':action==='edit'?'redrafting':action==='skip'?'skipped':'escalated '+(level||''));
+  refresh();
+}
+$('#bRun').onclick=async()=>{const r=await api('/api/run',{});toast(r.queued.length+' tickets queued');refresh();};
+$('#bAdd').onclick=()=>{$('#dlg').showModal();$('#f-sub').focus();};
+$('#bReset').onclick=async()=>{
+  if(Date.now()-resetArm>3000){resetArm=Date.now();$('#bReset').textContent='Click again';
+    setTimeout(()=>{if(Date.now()-resetArm>=3000)$('#bReset').textContent='Reset';},3100);return;}
+  resetArm=0;$('#bReset').textContent='Reset';
+  await api('/api/reset',{});sel=null;editing=false;rowSig.clear();detSig='';$('#queue').innerHTML='';
+  document.body.classList.remove('picked');toast('demo reset');refresh();
+};
+$('#fNew').onsubmit=async e=>{
+  if(e.submitter&&e.submitter.value==='cancel')return;
+  const f=new FormData(e.target);
+  const r=await api('/api/tickets',{subject:f.get('subject'),body:f.get('body'),requester:f.get('requester')});
+  $('#f-sub').value='';$('#f-body').value='';
+  sel=r.id;detSig='';toast(r.id+' created');refresh();
+};
+addEventListener('keydown',e=>{
+  const t=e.target,typing=t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable);
+  if(typing){
+    if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){const b=document.querySelector('[data-act="send"]');if(b){e.preventDefault();b.click();}}
+    return;
+  }
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  const k=e.key.toLowerCase();
+  if(k==='r'){e.preventDefault();$('#bRun').click();}
+  else if(k==='n'){e.preventDefault();$('#bAdd').click();}
+  else if(k==='t'){e.preventDefault();$('#bTheme').click();}
+  else if(k==='enter'){const b=document.querySelector('[data-act="send"]');if(b){e.preventDefault();b.click();}}
+  else if(k==='escape'&&document.body.classList.contains('picked')){document.body.classList.remove('picked');}
+  else if(k==='j'||k==='k'){
+    e.preventDefault();
+    const ids=S.tickets.map(x=>x.id),i=ids.indexOf(sel);
+    const n=k==='j'?Math.min(ids.length-1,i+1):Math.max(0,i-1);
+    if(ids[n]){sel=ids[n];editing=false;detSig='';paintQueue();paintDetail();
+      const el=$(`[data-id="${CSS.escape(sel)}"]`);if(el)el.scrollIntoView({block:'nearest'});}
+  }
+});
+refresh();setInterval(refresh,1800);
+</script>
+</body>
+</html>

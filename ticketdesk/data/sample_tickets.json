@@ -1,0 +1,572 @@
+[
+ {
+  "id": "INC-1001",
+  "subject": "Locked out of my account",
+  "body": "I typed my password wrong a few times this morning and now it says my account is locked. I have a client call at 10.",
+  "requester": "maria.lopez@northline.com",
+  "created": "2026-09-24T15:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "password",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T15:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1002",
+  "subject": "Password expired, can't log in",
+  "body": "Got the password expired message on my laptop and cannot log in at all now. Working from the Philadelphia office today.",
+  "requester": "james.carter@northline.com",
+  "created": "2026-09-24T16:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "password",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T16:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1003",
+  "subject": "Reset password please",
+  "body": "Forgot my password after vacation. Can you reset it?",
+  "requester": "priya.nair@northline.com",
+  "created": "2026-09-24T17:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "password",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T17:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1004",
+  "subject": "New phone, MFA codes gone",
+  "body": "I got a new iPhone yesterday and the Authenticator app is empty. Cannot get past the verification code screen.",
+  "requester": "tom.becker@northline.com",
+  "created": "2026-09-24T18:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "mfa",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T18:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1005",
+  "subject": "Authenticator keeps saying code invalid",
+  "body": "Every code from the authenticator app says invalid. Time on the phone looks right.",
+  "requester": "ana.silva@northline.com",
+  "created": "2026-09-24T19:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "mfa",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T19:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1006",
+  "subject": "VPN will not connect from home",
+  "body": "GlobalProtect spins and then says could not connect to gateway. Home Wi-Fi works fine for everything else.",
+  "requester": "kevin.wu@northline.com",
+  "created": "2026-09-24T20:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "vpn",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T20:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1007",
+  "subject": "How do I set up VPN on the new laptop",
+  "body": "Just got the new laptop from the office. Where do I get GlobalProtect and what portal address do I use?",
+  "requester": "sara.kim@northline.com",
+  "created": "2026-09-24T21:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "vpn",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T21:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1008",
+  "subject": "Printer on 4th floor NY not printing",
+  "body": "The Canon on the 4th floor in New York shows my job as sent but nothing comes out. Other people can print.",
+  "requester": "derek.jones@northline.com",
+  "created": "2026-09-24T22:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "printer",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T22:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1009",
+  "subject": "Scan to email not working",
+  "body": "Scanning from the Philadelphia lobby printer, the email never arrives. Tried twice.",
+  "requester": "linda.park@northline.com",
+  "created": "2026-09-24T23:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "printer",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-24T23:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1010",
+  "subject": "Outlook stuck on updating inbox",
+  "body": "Outlook has said updating inbox since yesterday. Webmail shows new mail. Restarted twice.",
+  "requester": "omar.hassan@northline.com",
+  "created": "2026-09-25T00:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "email",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T00:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1011",
+  "subject": "Not receiving emails from a vendor",
+  "body": "Emails from billing@acmecorp.com never arrive. They say they sent three. Nothing in junk.",
+  "requester": "grace.chen@northline.com",
+  "created": "2026-09-25T01:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "email",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T01:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1012",
+  "subject": "Shared mailbox missing in Outlook",
+  "body": "I was told I have access to the sales shared mailbox but it does not show up in Outlook.",
+  "requester": "nick.rossi@northline.com",
+  "created": "2026-09-25T02:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "email",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T02:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1013",
+  "subject": "How do I share my calendar with my manager",
+  "body": "Is there a way to let my manager see my calendar details, not just free or busy?",
+  "requester": "emily.wright@northline.com",
+  "created": "2026-09-25T03:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "how_to",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T03:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1014",
+  "subject": "How to record a Teams meeting",
+  "body": "Can you show me where the record button is in Teams, and where the recording ends up?",
+  "requester": "raj.patel@northline.com",
+  "created": "2026-09-25T04:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "how_to",
+   "level": "L1"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T04:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1015",
+  "subject": "Access to the finance shared drive",
+  "body": "Please add me to the finance shared drive. My manager Dana approved it in our 1:1.",
+  "requester": "lucas.brown@northline.com",
+  "created": "2026-09-25T05:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "access_request",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T05:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1016",
+  "subject": "New hire starts Monday",
+  "body": "Jordan Lee starts Monday in marketing, New York office. Needs laptop, email, Teams, and access to the marketing drive.",
+  "requester": "hannah.moore@northline.com",
+  "created": "2026-09-25T06:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "access_request",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T06:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1017",
+  "subject": "Need Visio installed",
+  "body": "I need Visio for network diagrams for the audit. Can it be installed this week?",
+  "requester": "victor.ramos@northline.com",
+  "created": "2026-09-25T07:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "software",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T07:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1018",
+  "subject": "Adobe Acrobat licence",
+  "body": "Acrobat says my licence is not valid anymore. I sign contracts daily so this is blocking.",
+  "requester": "sophie.turner@northline.com",
+  "created": "2026-09-25T08:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "software",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T08:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1019",
+  "subject": "Laptop will not turn on",
+  "body": "My laptop will not turn on at all. No light, tried the charger from a colleague. Philadelphia office.",
+  "requester": "ben.foster@northline.com",
+  "created": "2026-09-25T09:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "hardware",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T09:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1020",
+  "subject": "Docking station only shows one monitor",
+  "body": "Since the update my dock only drives one of my two monitors. Swapped cables, same thing.",
+  "requester": "ivy.zhang@northline.com",
+  "created": "2026-09-25T10:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "hardware",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T10:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1021",
+  "subject": "Reporting server disk is full",
+  "body": "The reporting server (RPT-01) says disk full and the nightly job failed. Finance needs the report by noon.",
+  "requester": "mark.evans@northline.com",
+  "created": "2026-09-25T11:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "server",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T11:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1022",
+  "subject": "Backup job failed last night",
+  "body": "The backup job for the file server shows failed with error 0x8007 in the console. Second night in a row.",
+  "requester": "olivia.scott@northline.com",
+  "created": "2026-09-25T12:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "server",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T12:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1023",
+  "subject": "Suspicious email asking for gift cards",
+  "body": "I got an email that looks like it is from our CEO asking me to buy gift cards. I did not click anything. Is this phishing?",
+  "requester": "chloe.adams@northline.com",
+  "created": "2026-09-25T13:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "security",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T13:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1024",
+  "subject": "I clicked a link in a strange email",
+  "body": "I clicked a link in an email about a shared document and it asked me to log in. I typed my password before I realised. What do I do?",
+  "requester": "daniel.green@northline.com",
+  "created": "2026-09-25T14:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "security",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T14:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1025",
+  "subject": "Firewall rule for ping and traceroute",
+  "body": "We need to allow ping and traceroute from the New York office to the monitoring server in Philadelphia for the new NOC tool.",
+  "requester": "alex.murphy@northline.com",
+  "created": "2026-09-25T15:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "firewall_change",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T15:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1026",
+  "subject": "Open port 8443 for vendor appliance",
+  "body": "Vendor needs inbound 8443 to the new appliance in the PA data closet from their support range.",
+  "requester": "nina.petrov@northline.com",
+  "created": "2026-09-25T16:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "firewall_change",
+   "level": "L2"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T16:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1027",
+  "subject": "Wi-Fi down on the whole 3rd floor",
+  "body": "Nobody on the 3rd floor in New York can get on Wi-Fi since about 9am. Wired desks work.",
+  "requester": "paul.walker@northline.com",
+  "created": "2026-09-25T17:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "network",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T17:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1028",
+  "subject": "Philadelphia office cannot reach the file server",
+  "body": "Everyone in Philadelphia gets a timeout opening the file server. New York is fine. Started 20 minutes ago.",
+  "requester": "rachel.diaz@northline.com",
+  "created": "2026-09-25T18:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "network",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T18:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1029",
+  "subject": "Email is down for everyone",
+  "body": "Nobody can send or receive email, the whole office is affected. Outlook and webmail both fail.",
+  "requester": "steve.hall@northline.com",
+  "created": "2026-09-25T19:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "outage",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T19:08",
+    "event": "created"
+   }
+  ]
+ },
+ {
+  "id": "INC-1030",
+  "subject": "Freshservice portal down for all users",
+  "body": "The support portal returns a 503 for all users in both offices. We cannot log tickets.",
+  "requester": "julia.king@northline.com",
+  "created": "2026-09-25T20:08",
+  "status": "new",
+  "stage": "new",
+  "expected": {
+   "category": "outage",
+   "level": "L3"
+  },
+  "history": [
+   {
+    "at": "2026-09-25T20:08",
+    "event": "created"
+   }
+  ]
+ }
+]
