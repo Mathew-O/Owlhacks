@@ -1,0 +1,1253 @@
+<title>Ticket Triage Graph</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* ============ tokens: dark first (ops console), light is the daylight panel ============ */
+:root{
+  color-scheme:dark;
+  --bg:#0A0C11; --panel:#12151D; --sunk:#0D1016; --raise:#171B25;
+  --line:#232936; --line-soft:#1A1F2A; --edge-ink:#3B4455;
+  --text:#E9ECF2; --dim:#98A1B2; --faint:#68717F;
+  --signal:#5B9DFF; --signal-ink:#08101F; --signal-soft:#132444;
+  --l1:#2FD07E; --l2:#FFAE35; --l3:#FF6360; --human:#B98BFF; --tool:#3FD0D8;
+  --code-bg:#080A0F; --code-line:#1A1F2C; --code-ink:#DCE2EE;
+  --kw:#7FB0FF; --str:#79DFA6; --cmt:#5C6678; --num:#FFB077; --cls:#D9B3FF; --fn:#57D6DE; --dec:#FFD27A;
+  --dot-grid:rgba(255,255,255,.045);
+  --sheen:rgba(255,255,255,.045);
+  --f-disp:'Archivo',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-body:'Archivo',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,'Cascadia Mono',Menlo,Consolas,monospace;
+  --r-xs:3px; --r-sm:5px; --r-md:8px; --r-lg:12px;
+  --ease:cubic-bezier(.2,.7,.3,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    color-scheme:light;
+    --bg:#F4F6F9; --panel:#FFFFFF; --sunk:#EDF0F5; --raise:#FFFFFF;
+    --line:#DFE4EC; --line-soft:#EAEDF3; --edge-ink:#9BA5B6;
+    --text:#0D1117; --dim:#5A6474; --faint:#8C96A6;
+    --signal:#1F6FEB; --signal-ink:#FFFFFF; --signal-soft:#E4EDFD;
+    --l1:#0F8B50; --l2:#9A5A00; --l3:#C3312C; --human:#6F34C4; --tool:#0A6E77;
+    --dot-grid:rgba(13,17,23,.055);
+    --sheen:rgba(255,255,255,.9);
+  }
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#F4F6F9; --panel:#FFFFFF; --sunk:#EDF0F5; --raise:#FFFFFF;
+  --line:#DFE4EC; --line-soft:#EAEDF3; --edge-ink:#9BA5B6;
+  --text:#0D1117; --dim:#5A6474; --faint:#8C96A6;
+  --signal:#1F6FEB; --signal-ink:#FFFFFF; --signal-soft:#E4EDFD;
+  --l1:#0F8B50; --l2:#9A5A00; --l3:#C3312C; --human:#6F34C4; --tool:#0A6E77;
+  --dot-grid:rgba(13,17,23,.055);
+  --sheen:rgba(255,255,255,.9);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.55 var(--f-body);
+     -webkit-font-smoothing:antialiased;font-feature-settings:"liga","kern";overflow-x:hidden}
+a{color:var(--signal);text-underline-offset:3px}
+h1,h2,h3,h4{font-family:var(--f-disp);margin:0;text-wrap:balance}
+h1{font-size:clamp(31px,4.3vw,52px);line-height:1.0;font-weight:700;letter-spacing:-.032em}
+h2{font-size:clamp(22px,2.7vw,31px);line-height:1.08;font-weight:700;letter-spacing:-.024em}
+h3{font-size:16px;line-height:1.25;font-weight:600;letter-spacing:-.011em}
+p{margin:0}
+code,kbd{font-family:var(--f-mono)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:2px}
+::selection{background:var(--signal);color:var(--signal-ink)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---- micro label: the mono uppercase tag used everywhere ---- */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:500 10.5px/1 var(--f-mono);
+         letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.eyebrow::before{content:"";width:14px;height:1px;background:var(--edge-ink);flex:none}
+.eyebrow.dot::before{width:6px;height:6px;border-radius:50%;background:var(--signal);
+         box-shadow:0 0 0 3px color-mix(in srgb,var(--signal) 22%,transparent)}
+.lede{max-width:60ch;color:var(--dim);font-size:16.5px;line-height:1.5}
+.muted{color:var(--dim)}
+.wrap{max-width:1260px;margin-inline:auto;padding-inline:clamp(16px,3.2vw,36px)}
+
+/* ============ header: instrument bar ============ */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+     background:color-mix(in srgb,var(--bg) 82%,transparent);
+     backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
+     border-bottom:1px solid var(--line-soft)}
+.top .in{max-width:1260px;margin-inline:auto;padding-inline:clamp(16px,3.2vw,36px);
+         display:flex;align-items:center;gap:18px;height:56px}
+.brand{display:flex;align-items:center;gap:10px;white-space:nowrap;min-width:0}
+.brand .mk{width:22px;height:22px;flex:none;color:var(--signal)}
+.brand b{font-family:var(--f-disp);font-weight:700;font-size:15.5px;letter-spacing:-.02em}
+.brand span{font:500 10.5px var(--f-mono);color:var(--faint);letter-spacing:.06em;
+            padding-left:10px;margin-left:2px;border-left:1px solid var(--line)}
+nav.sec{margin-left:auto;display:flex;gap:1px;overflow-x:auto;scrollbar-width:none;min-width:0}
+nav.sec::-webkit-scrollbar{display:none}
+nav.sec a{font:500 12.5px var(--f-body);color:var(--dim);text-decoration:none;padding:7px 10px;
+          border-radius:var(--r-sm);white-space:nowrap;transition:color .12s var(--ease),background .12s var(--ease)}
+nav.sec a:hover{color:var(--text);background:var(--raise)}
+nav.sec a.on{color:var(--text);background:var(--raise);box-shadow:inset 0 0 0 1px var(--line)}
+.tgl{flex:none;width:32px;height:32px;display:grid;place-items:center;border-radius:var(--r-sm);
+     border:0;background:transparent;color:var(--dim);cursor:pointer;transition:color .12s,background .12s}
+.tgl:hover{color:var(--text);background:var(--raise)}
+.tgl svg{width:15px;height:15px}
+.scan{height:1px;background:var(--signal);width:0;transition:width .1s linear;box-shadow:0 0 8px var(--signal)}
+
+/* ============ hero ============ */
+.hero{padding-block:clamp(36px,5.4vw,66px) 26px;display:grid;gap:22px}
+.hero .split{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(24px,4vw,56px);align-items:end}
+@media (max-width:980px){.hero .split{grid-template-columns:1fr;align-items:start}}
+.hero h1{margin-top:14px}
+.hero .lede{margin-top:16px}
+.hero .hl{color:var(--signal)}
+/* terminal card */
+.term{border:1px solid var(--line);border-radius:var(--r-md);background:var(--code-bg);overflow:hidden;
+      box-shadow:0 1px 0 var(--sheen) inset,0 22px 50px -32px rgba(0,0,0,.7)}
+.term .hd{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--code-line);
+          background:color-mix(in srgb,var(--code-line) 45%,var(--code-bg));
+          font:500 11px var(--f-mono);letter-spacing:.04em;color:var(--cmt)}
+.term .hd .led{width:6px;height:6px;border-radius:50%;background:var(--l1);flex:none;animation:blip 1.6s ease-in-out infinite}
+.term .hd .rt{margin-left:auto;letter-spacing:.04em;text-transform:none}
+.term pre{margin:0;padding:13px 14px;font:400 11.7px/1.72 var(--f-mono);color:var(--code-ink);
+          overflow-x:auto;scrollbar-width:thin}
+.term .p{color:var(--str)} .term .c{color:var(--cmt)} .term .b{color:var(--kw)}
+.term .ok{color:var(--l1)} .term .wa{color:var(--l2)} .term .cr{color:var(--l3)} .term .hu{color:var(--human)}
+.term .n{color:var(--code-ink);font-weight:500}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .term .c{color:#7A8498}}
+:root[data-theme="light"] .term .c{color:#7A8498}
+@media (prefers-reduced-motion:no-preference){
+  .term pre span[data-l]{animation:rise .3s var(--ease-out) backwards}
+}
+/* readout strip */
+.readout{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);
+         border-radius:var(--r-md);background:var(--panel);overflow:hidden;margin-top:6px}
+.readout div{padding:13px 16px;border-left:1px solid var(--line-soft);display:grid;gap:3px}
+.readout div:first-child{border-left:0}
+.readout b{font:700 26px/1 var(--f-disp);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.readout span{font:500 10px var(--f-mono);letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+@media (max-width:720px){.readout{grid-template-columns:1fr 1fr}
+  .readout div:nth-child(3),.readout div:nth-child(4){border-top:1px solid var(--line-soft)}
+  .readout div:nth-child(3){border-left:0}}
+
+/* ============ console ============ */
+.console{border:1px solid var(--line);border-radius:var(--r-lg);background:var(--panel);
+         overflow:hidden;box-shadow:0 1px 0 var(--sheen) inset, 0 24px 60px -30px rgba(0,0,0,.6)}
+.console .rail{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line-soft);
+               background:var(--raise);font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.console .rail .led{width:7px;height:7px;border-radius:50%;background:var(--l1);flex:none;
+                    box-shadow:0 0 0 3px color-mix(in srgb,var(--l1) 20%,transparent)}
+.console .rail .sp{margin-left:auto;display:flex;gap:14px;align-items:center}
+.graph-wrap{overflow-x:auto;padding:18px 14px 10px;border-bottom:1px solid var(--line-soft);
+            background:var(--sunk);
+            background-image:radial-gradient(var(--dot-grid) 1px, transparent 1px);
+            background-size:22px 22px;background-position:-1px -1px}
+.graph-wrap svg{display:block;min-width:1000px;width:100%;height:auto;color:var(--text)}
+figure{margin:0}
+figcaption{display:flex;flex-wrap:wrap;gap:7px 16px;align-items:center;padding:10px 16px;
+           font:500 10.5px var(--f-mono);letter-spacing:.06em;color:var(--faint);border-bottom:1px solid var(--line-soft)}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.lg i{display:inline-block;width:3px;height:12px;border-radius:1px;background:var(--x)}
+.lg svg{width:26px;height:10px;overflow:visible}
+
+/* graph primitives */
+.edge{fill:none;stroke:var(--edge-ink);stroke-width:1.5}
+.edge.cond{stroke-dasharray:5 4}
+.edge.cmd{stroke-dasharray:2 3.5}
+.edge.was{stroke:var(--signal);opacity:.4}
+.edge.on{stroke:var(--signal);stroke-width:2.4;stroke-dasharray:none}
+.spark{fill:none;stroke:var(--signal);stroke-width:3;stroke-linecap:round;opacity:0;
+       filter:drop-shadow(0 0 4px var(--signal))}
+.spark.go{opacity:1;stroke-dasharray:7 93;animation:pkt .8s cubic-bezier(.4,0,.5,1) forwards}
+@keyframes pkt{from{stroke-dashoffset:100}to{stroke-dashoffset:0;opacity:0}}
+.arr{fill:var(--edge-ink)} .arr-on{fill:var(--signal)}
+.elabel{font:500 10px var(--f-mono);fill:var(--faint);letter-spacing:.02em}
+.elabel-bg{fill:var(--sunk)}
+.node{cursor:pointer}
+.node .box{fill:var(--panel);stroke:var(--line);stroke-width:1.4;transition:fill .18s var(--ease),stroke .18s var(--ease)}
+.node:hover .box{stroke:var(--faint)}
+.node.sel .box{stroke:var(--text);stroke-width:2}
+.node.was .box{stroke:color-mix(in srgb,var(--signal) 55%,var(--line))}
+.node.on .box{fill:var(--signal-soft);stroke:var(--signal);stroke-width:2.2}
+.node.paused .box{fill:color-mix(in srgb,var(--human) 16%,var(--panel));stroke:var(--human);stroke-width:2.2}
+.node .ping{fill:none;stroke:var(--signal);stroke-width:2;opacity:0}
+.node.on .ping{animation:ping .7s var(--ease-out) forwards}
+.node.paused .ping{stroke:var(--human);animation:breathe 1.9s ease-in-out infinite}
+@keyframes ping{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.13)}}
+@keyframes breathe{0%,100%{opacity:0}50%{opacity:.5}}
+.node .lbl{font:500 11.5px var(--f-mono);fill:var(--text);letter-spacing:-.01em}
+.node .stripe{fill:var(--faint)}
+.node.k-llm .stripe{fill:var(--signal)} .node.k-tool .stripe{fill:var(--tool)} .node.k-human .stripe{fill:var(--human)}
+.node.k-term .box{fill:var(--edge-ink);stroke:var(--edge-ink)}
+.node.k-term.on .box{fill:var(--signal);stroke:var(--signal)}
+.node.k-term .lbl{fill:var(--faint);font-size:10px}
+
+/* console grid */
+.cg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.cg>*{min-width:0;padding:16px}
+.cg>:first-child{border-right:1px solid var(--line-soft)}
+@media (max-width:900px){.cg{grid-template-columns:1fr}.cg>:first-child{border-right:0;border-bottom:1px solid var(--line-soft)}}
+.chips{display:grid;gap:5px;margin-top:10px}
+.chip{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;text-align:left;
+      font:400 13px var(--f-body);padding:8px 10px;border-radius:var(--r-sm);border:1px solid var(--line);
+      background:var(--panel);color:var(--text);cursor:pointer;transition:border-color .12s var(--ease),background .12s var(--ease),transform .1s var(--ease)}
+.chip:hover{border-color:var(--faint)}
+.chip:active{transform:translateY(1px)}
+.chip small{font:500 10.5px var(--f-mono);color:var(--faint);letter-spacing:.02em}
+.chip small:last-child{color:var(--dim);white-space:nowrap}
+.chip[aria-pressed="true"]{border-color:var(--signal);background:var(--signal-soft)}
+.chip[aria-pressed="true"] small:first-child{color:var(--signal)}
+.ticket{margin-top:12px;border:1px solid var(--line);border-left:2px solid var(--edge-ink);
+        border-radius:0 var(--r-sm) var(--r-sm) 0;padding:11px 13px;background:var(--sunk)}
+.ticket .h{display:flex;flex-wrap:wrap;gap:5px 11px;align-items:baseline;font-size:12.5px;color:var(--dim)}
+.ticket .h b{font:500 12.5px var(--f-mono);color:var(--text)}
+.ticket p{margin-top:6px;font-size:13.5px;color:var(--text);line-height:1.45}
+.ctl{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:13px}
+.btn{position:relative;font:500 12.5px var(--f-body);padding:7px 12px;border-radius:var(--r-sm);
+     border:1px solid var(--line);background:var(--panel);color:var(--text);cursor:pointer;
+     transition:background .12s var(--ease),border-color .12s var(--ease),transform .1s var(--ease)}
+.btn:hover{background:var(--raise);border-color:var(--faint)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--signal);color:var(--signal-ink);border-color:transparent;font-weight:600}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn:disabled{opacity:.4;cursor:default;transform:none}
+.btn kbd{margin-left:7px;font:500 10px var(--f-mono);opacity:.6;border:1px solid currentColor;
+         border-radius:3px;padding:0 3px;line-height:1.4;vertical-align:1px}
+.ctl .st{font:500 11px var(--f-mono);color:var(--dim);margin-left:auto;display:inline-flex;align-items:center;gap:7px;
+         letter-spacing:.04em}
+.ctl .st::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--faint);flex:none}
+.ctl .st.live::before{background:var(--l1);animation:blip 1.1s ease-in-out infinite}
+.ctl .st.hold::before{background:var(--human)}
+.ctl .st.done::before{background:var(--signal)}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
+
+.log{margin-top:13px;height:236px;overflow:auto;font:400 12px/1.5 var(--f-mono);
+     border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 11px;background:var(--code-bg);
+     color:var(--code-ink);scrollbar-width:thin}
+.log:empty::before{content:"// press Run. one line per node.";color:var(--cmt)}
+.log div{display:grid;grid-template-columns:58px 112px 1fr;gap:9px;padding:2px 0;
+         animation:lin .18s var(--ease-out) backwards}
+@keyframes lin{from{opacity:0;transform:translateX(-5px)}}
+.log .t{color:var(--cmt);font-variant-numeric:tabular-nums}
+.log .n{color:var(--signal);font-weight:500}
+.log .hu,.log .hu .n{color:var(--human)}
+.log .end .n{color:var(--l1)}
+
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line-soft);margin:-16px -16px 13px;padding:9px 14px 0}
+.tab{font:500 12.5px var(--f-body);padding:7px 11px;border:0;background:none;color:var(--dim);cursor:pointer;
+     border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .12s}
+.tab:hover{color:var(--text)}
+.tab[aria-selected="true"]{color:var(--text);border-bottom-color:var(--signal)}
+.pane[hidden]{display:none}
+.state{font:400 12px/1.5 var(--f-mono);white-space:pre-wrap;word-break:break-word;max-height:330px;overflow:auto;scrollbar-width:thin}
+.state .k{display:block;padding:3px 7px;border-radius:var(--r-xs);margin:1px -7px;transition:background .3s var(--ease)}
+.state .k.chg{background:var(--signal-soft)}
+.state .key{color:var(--signal);font-weight:500}
+.state .red{color:var(--faint);font-size:10.5px}
+.state .unset{color:var(--faint)}
+
+.intr{margin-top:13px;border:1px solid var(--human);border-radius:var(--r-sm);padding:12px;
+      background:color-mix(in srgb,var(--human) 9%,var(--panel));animation:pop .22s var(--ease-out)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.intr h4{margin:0 0 7px;font:600 13px var(--f-disp);color:var(--human);display:flex;align-items:center;gap:7px}
+.intr h4::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--human);
+                 box-shadow:0 0 0 3px color-mix(in srgb,var(--human) 24%,transparent)}
+.intr pre{margin:6px 0 11px;font:400 11.5px/1.5 var(--f-mono);white-space:pre-wrap;color:var(--text)}
+.intr .opts{display:grid;gap:7px}
+.intr .opt{display:grid;gap:3px}
+.intr .opt small{font:400 10.5px var(--f-mono);color:var(--faint)}
+.summary{margin-top:13px;padding:11px 13px;border-radius:var(--r-sm);background:var(--sunk);
+         border:1px solid var(--line);font-size:13.5px;animation:pop .22s var(--ease-out)}
+.summary b{font-family:var(--f-mono);font-weight:500}
+
+.pill{display:inline-block;font:500 10px/1 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;
+      padding:5px 7px;border-radius:999px;border:1px solid currentColor}
+.p-llm{color:var(--signal)} .p-det{color:var(--dim)} .p-tool{color:var(--tool)}
+.p-human{color:var(--human)} .p-term{color:var(--faint)}
+.insp h3{font-family:var(--f-mono);font-weight:500;font-size:16px}
+.insp .hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.insp .purpose{margin:9px 0 12px;font-size:14px;color:var(--dim)}
+.rw{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0;font-size:12.5px}
+.rw div{background:var(--sunk);border:1px solid var(--line-soft);border-radius:var(--r-sm);padding:8px 10px}
+.rw span{display:block;font:500 9.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
+.gotcha{border-left:2px solid var(--l2);padding:7px 11px;margin:12px 0;font-size:13px;
+        background:color-mix(in srgb,var(--l2) 8%,transparent);border-radius:0 var(--r-sm) var(--r-sm) 0;color:var(--text)}
+.pick{display:flex;gap:7px;align-items:center;margin-bottom:13px}
+.pick .sel{flex:1;min-width:0;font:500 12.5px var(--f-mono);padding:7px 9px;border-radius:var(--r-sm);
+           border:1px solid var(--line);background:var(--panel);color:var(--text)}
+
+/* ============ sections with the stage rail ============ */
+section{padding-block:clamp(40px,5.5vw,66px);border-top:1px solid var(--line-soft);position:relative}
+.sh{display:grid;gap:9px;margin-bottom:24px;max-width:70ch}
+.sh .lede{margin-top:1px}
+.stage{position:absolute;left:-30px;top:calc(clamp(40px,5.5vw,66px) + 1px);
+       font:500 10.5px var(--f-mono);color:var(--faint);letter-spacing:.06em}
+@media (max-width:1340px){.stage{display:none}}
+
+/* code */
+.codebox{position:relative;margin-top:16px}
+.codebox.named{margin-top:26px}
+pre.code{background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-line);border-radius:var(--r-md);
+         padding:15px 16px;overflow:auto;font:400 12.5px/1.6 var(--f-mono);margin:0;tab-size:4;scrollbar-width:thin}
+pre.code .c{color:var(--cmt)} pre.code .s{color:var(--str)} pre.code .k{color:var(--kw)}
+pre.code .d{color:var(--dec)} pre.code .n{color:var(--num)} pre.code .cl{color:var(--cls)}
+pre.code .f{color:var(--fn)} pre.code .b{color:var(--cls)}
+.copy{position:absolute;top:9px;right:9px;font:500 10.5px var(--f-mono);padding:5px 8px;border-radius:var(--r-xs);
+      border:1px solid var(--code-line);background:var(--code-bg);color:var(--code-ink);cursor:pointer;opacity:.7;
+      transition:opacity .12s,background .12s}
+.copy:hover{opacity:1;background:var(--code-line)}
+.fname{position:absolute;top:0;left:14px;transform:translateY(-50%);font:500 10.5px var(--f-mono);
+       color:var(--dim);background:var(--bg);padding:2px 8px;border:1px solid var(--code-line);border-radius:var(--r-xs)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.two>*{min-width:0}
+@media (max-width:860px){.two{grid-template-columns:1fr}}
+
+/* tables */
+.tscroll{overflow-x:auto;margin-top:18px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel)}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+.tbl th{text-align:left;font:500 9.5px var(--f-mono);letter-spacing:.11em;text-transform:uppercase;color:var(--faint);
+        padding:11px 14px;border-bottom:1px solid var(--line);background:var(--raise);white-space:nowrap}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top;color:var(--dim)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl td:first-child{color:var(--text);font-weight:500}
+.tbl code{font-size:12px;background:var(--sunk);padding:2px 5px;border-radius:var(--r-xs);color:var(--text)}
+
+/* pipeline steps */
+.steps{margin-top:18px;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:var(--panel)}
+.step{display:grid;grid-template-columns:44px 1.05fr 1.5fr 128px;gap:14px;padding:13px 16px;
+      border-top:1px solid var(--line-soft);align-items:baseline;font-size:13.5px;color:var(--dim);
+      transition:background .12s var(--ease)}
+.step:hover{background:var(--raise)}
+.step:first-child{border-top:0;background:var(--raise);pointer-events:none}
+.step:first-child span{font:500 9.5px var(--f-mono);letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+.step .no{font:500 12px var(--f-mono);color:var(--signal);font-variant-numeric:tabular-nums}
+.step b{color:var(--text);font-family:var(--f-mono);font-weight:500;font-size:13px}
+.who{display:inline-block;font:500 9.5px/1 var(--f-mono);letter-spacing:.09em;text-transform:uppercase;
+     padding:4px 7px;border-radius:999px;white-space:nowrap}
+.who.h{background:color-mix(in srgb,var(--human) 15%,transparent);color:var(--human)}
+.who.a{background:var(--signal-soft);color:var(--signal)}
+@media (max-width:820px){.step{grid-template-columns:34px 1fr}
+  .step>:nth-child(3),.step>:nth-child(4){grid-column:2}
+  .step:first-child>:nth-child(n+3){display:none}}
+
+/* outcome cards */
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:18px;
+       background:var(--line);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+@media (max-width:900px){.three{grid-template-columns:1fr}}
+.card{background:var(--panel);padding:18px}
+.card h3{margin:10px 0 7px}
+.card p{color:var(--dim);font-size:13.5px}
+.card ul{margin:11px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:12.5px;color:var(--dim)}
+.card ul li{padding-left:15px;position:relative}
+.card ul li::before{content:"";position:absolute;left:0;top:8px;width:6px;height:1px;background:var(--edge-ink)}
+.card .big{font:700 30px/1 var(--f-disp);letter-spacing:-.03em;margin:4px 0 0}
+.card .k{display:block;font:500 9.5px var(--f-mono);letter-spacing:.11em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
+.lvl{display:inline-flex;align-items:center;gap:5px;font:700 10.5px/1 var(--f-mono);padding:4px 7px;
+     border-radius:var(--r-xs);letter-spacing:.04em}
+.lvl::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.lvl.L1{background:color-mix(in srgb,var(--l1) 15%,transparent);color:var(--l1)}
+.lvl.L2{background:color-mix(in srgb,var(--l2) 15%,transparent);color:var(--l2)}
+.lvl.L3{background:color-mix(in srgb,var(--l3) 15%,transparent);color:var(--l3)}
+
+/* dashboard mock */
+.mock{margin-top:18px;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;
+      background:var(--panel);font-size:13px;box-shadow:0 20px 50px -30px rgba(0,0,0,.55)}
+.mock .bar{display:flex;gap:7px;align-items:center;padding:9px 13px;border-bottom:1px solid var(--line-soft);
+           background:var(--raise);font:500 10.5px var(--f-mono);flex-wrap:wrap;color:var(--dim)}
+.mock .bar b{font-family:var(--f-disp);font-size:13.5px;color:var(--text);margin-right:5px;letter-spacing:-.02em}
+.mock .tag{border:1px solid var(--line);border-radius:var(--r-xs);padding:3px 7px;color:var(--faint)}
+.mock .tag.on{color:var(--l1);border-color:color-mix(in srgb,var(--l1) 45%,transparent)}
+.mock .grid{display:grid;grid-template-columns:276px 1fr}
+@media (max-width:820px){.mock .grid{grid-template-columns:1fr}.mock .q{border-right:0;border-bottom:1px solid var(--line-soft)}}
+.mock .q{border-right:1px solid var(--line-soft);background:var(--sunk)}
+.mock .q>div{padding:9px 13px;border-bottom:1px solid var(--line-soft);display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.mock .q>div.sel{background:var(--panel);box-shadow:inset 2px 0 0 var(--signal)}
+.mock .q .id{font:500 10.5px var(--f-mono);color:var(--faint)}
+.mock .d{padding:14px 16px;display:grid;gap:11px}
+.mock .why{border-left:2px solid var(--signal);padding:7px 11px;background:var(--signal-soft);
+           border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:12.5px}
+.mock .btns{display:flex;gap:6px;flex-wrap:wrap}
+.mock .btns span{border:1px solid var(--line);border-radius:var(--r-xs);padding:5px 9px;font-weight:500;font-size:12px;color:var(--dim)}
+.mock .btns span.g{border-color:color-mix(in srgb,var(--l1) 50%,transparent);color:var(--l1)}
+.mock .btns span.r{border-color:color-mix(in srgb,var(--l3) 50%,transparent);color:var(--l3)}
+
+/* demo script timeline */
+.script{margin-top:18px;display:grid;gap:0;border-left:1px solid var(--line);margin-left:6px}
+.script div{display:grid;grid-template-columns:62px 1fr;gap:16px;padding:12px 0 12px 20px;position:relative;font-size:14px;color:var(--dim)}
+.script div::before{content:"";position:absolute;left:-4px;top:19px;width:7px;height:7px;border-radius:50%;
+                    background:var(--bg);border:1.5px solid var(--edge-ink)}
+.script div:hover::before{border-color:var(--signal);background:var(--signal)}
+.script b{font:500 12.5px var(--f-mono);color:var(--signal);font-variant-numeric:tabular-nums}
+.script span strong{color:var(--text);font-weight:600}
+
+/* questions */
+.qs{display:grid;gap:1px;margin-top:18px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+.q-item{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;padding:13px 16px;
+        background:var(--panel);cursor:pointer;transition:background .12s var(--ease)}
+.q-item:hover{background:var(--raise)}
+.q-item input{margin-top:2px;width:15px;height:15px;accent-color:var(--signal);cursor:pointer}
+.q-item b{display:block;font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.q-item span{color:var(--dim);font-size:13px}
+.q-item.done b{text-decoration:line-through;color:var(--faint)}
+.q-item.done span{opacity:.55}
+
+/* plan + ladder */
+.plan{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:18px;background:var(--line);
+      border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+@media (max-width:900px){.plan{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.plan{grid-template-columns:1fr}}
+.plan .card b.t{display:block;font:500 10px var(--f-mono);letter-spacing:.11em;text-transform:uppercase;
+                color:var(--signal);margin-bottom:9px}
+.ladder{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+@media (max-width:820px){.ladder{grid-template-columns:1fr}}
+.ladder .card{border:1px solid var(--line);border-radius:var(--r-md)}
+.ladder .card.now{border-color:var(--signal);box-shadow:0 0 0 1px var(--signal), 0 14px 40px -24px var(--signal)}
+.ladder .card small{display:block;font:500 10px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+.ladder .card.now small{color:var(--signal)}
+.ladder .card h3{margin:0;font-size:14.5px;font-weight:600;line-height:1.35}
+
+.note{margin-top:16px;padding:11px 14px;border-radius:var(--r-sm);background:var(--sunk);
+      border:1px solid var(--line-soft);font-size:13.5px;color:var(--dim)}
+.note b{color:var(--text)}
+ul.tight{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:7px;font-size:14px;color:var(--dim)}
+ul.tight li{padding-left:17px;position:relative}
+ul.tight li::before{content:"";position:absolute;left:0;top:10px;width:7px;height:1px;background:var(--signal)}
+ul.tight b{color:var(--text)}
+.kbd{font:500 11px var(--f-mono);background:var(--raise);border:1px solid var(--line);
+     border-bottom-width:2px;border-radius:var(--r-xs);padding:2px 5px;color:var(--text)}
+.foot{padding-block:28px 46px;border-top:1px solid var(--line-soft);font:400 12.5px/1.6 var(--f-mono);
+      color:var(--faint);display:grid;gap:5px}
+
+/* boot cascade: short, hero only, resting state is visible */
+@media (prefers-reduced-motion:no-preference){
+  .rise{animation:rise .42s var(--ease-out) backwards}
+  .rise:nth-child(1){animation-delay:.02s} .rise:nth-child(2){animation-delay:.07s}
+  .rise:nth-child(3){animation-delay:.12s} .rise:nth-child(4){animation-delay:.17s}
+  @keyframes rise{from{opacity:0;transform:translateY(9px)}}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<header class="top">
+ <div class="in">
+  <div class="brand">
+    <svg class="mk" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="1.2" y="8.4" width="6.2" height="7.2" rx="1.6" stroke="currentColor" stroke-width="1.6"/>
+      <rect x="16.6" y="2.2" width="6.2" height="7.2" rx="1.6" stroke="currentColor" stroke-width="1.6"/>
+      <rect x="16.6" y="14.6" width="6.2" height="7.2" rx="1.6" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M7.4 12h4.2M11.6 12V5.8h5M11.6 12v6.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <b>ticketdesk</b><span>ticket triage graph</span>
+  </div>
+  <nav class="sec" aria-label="Sections">
+    <a href="#graph">Graph</a><a href="#outcomes">Outcomes</a><a href="#pipeline">Pipeline</a><a href="#brains">Brains</a><a href="#human">Human</a><a href="#code">Code</a><a href="#demo">Demo</a><a href="#questions">Questions</a><a href="#plan">Plan</a>
+  </nav>
+  <button class="tgl" id="theme" type="button" aria-label="Switch colour theme" title="Switch theme"></button>
+ </div>
+ <div class="scan" id="scan"></div>
+</header>
+
+<div class="wrap">
+<section class="hero" style="border-top:0">
+  <div class="split">
+    <div>
+      <div class="rise"><span class="eyebrow dot">LangGraph 1.x &nbsp;/&nbsp; Ollama or Claude &nbsp;/&nbsp; runs on the laptop</span></div>
+      <h1 class="rise">Tickets in. <span class="hl">L1 answered,</span> L2 and L3 handed over.</h1>
+      <p class="lede rise">The agent reads the ticket, picks a level, pulls the runbook, writes the fix and the reply. Level 1 and sure, it sends. Level 2 or 3, it escalates with a note a specialist can start from. Not sure, a person clicks.</p>
+    </div>
+    <div class="term rise" aria-label="Transcript of a real run">
+      <div class="hd"><span class="led"></span>run_ui.bat<span class="rt">acer &middot; gemma3:4b &middot; local</span></div>
+      <pre><span data-l style="animation-delay:.10s"><span class="c">$</span> <span class="b">python desk.py ui</span>
+</span><span data-l style="animation-delay:.16s"><span class="c">   dashboard  http://localhost:8000</span>
+</span><span data-l style="animation-delay:.22s"><span class="c">   triage     ollama:gemma3:4b</span>
+</span><span data-l style="animation-delay:.28s"><span class="c">   gate       0.80 &middot; auto_reply on</span>
+
+</span><span data-l style="animation-delay:.36s"><span class="n">INC-1001</span>  <span class="ok">L1</span> password  0.93  <span class="ok">auto replied</span>
+</span><span data-l style="animation-delay:.42s"><span class="n">INC-1007</span>  <span class="hu">L1</span> vpn       0.70  <span class="hu">needs a person</span>
+</span><span data-l style="animation-delay:.48s"><span class="n">INC-1019</span>  <span class="wa">L2</span> hardware  0.90  <span class="wa">escalated L2</span>
+</span><span data-l style="animation-delay:.54s"><span class="n">INC-1029</span>  <span class="cr">L3</span> outage    0.97  <span class="cr">escalated L3</span>
+
+</span><span data-l style="animation-delay:.62s"><span class="c">30 tickets &middot; 13 auto &middot; 16 escalated &middot; 1 waiting</span>
+</span><span data-l style="animation-delay:.68s"><span class="c">levels right</span> <span class="ok">30 / 30</span>  <span class="c">&middot; 0 human minutes so far</span></span></pre>
+    </div>
+  </div>
+  <div class="readout rise" aria-label="Graph facts">
+    <div><b class="num" data-count="11">11</b><span>nodes</span></div>
+    <div><b class="num" data-count="3">3</b><span>model calls / ticket</span></div>
+    <div><b class="num" data-count="1">1</b><span>pause, only when unsure</span></div>
+    <div><b class="num" data-count="2">2</b><span>brains, one line apart</span></div>
+  </div>
+</section>
+
+<div class="console rise" id="graph">
+  <div class="rail"><span class="led"></span>graph · firewall of last resort is a human
+    <span class="sp"><span id="railstat">idle</span></span>
+  </div>
+  <figure>
+    <div class="graph-wrap"><svg id="g" viewBox="0 0 1100 470" role="img" aria-label="Ticket flow: intake, triage, retrieve, solve, draft, gate, then auto send, escalate, or human review, then log"></svg></div>
+    <figcaption>
+      <span class="lg"><svg viewBox="0 0 26 10"><line x1="0" y1="5" x2="26" y2="5" class="edge"/></svg>always</span>
+      <span class="lg"><svg viewBox="0 0 26 10"><line x1="0" y1="5" x2="26" y2="5" class="edge cond"/></svg>the policy picks</span>
+      <span class="lg"><svg viewBox="0 0 26 10"><line x1="0" y1="5" x2="26" y2="5" class="edge cmd"/></svg>a person picks</span>
+      <span class="lg"><i style="--x:var(--signal)"></i>model</span>
+      <span class="lg"><i style="--x:var(--faint)"></i>plain code</span>
+      <span class="lg"><i style="--x:var(--tool)"></i>ticket system</span>
+      <span class="lg"><i style="--x:var(--human)"></i>waits for a person</span>
+    </figcaption>
+  </figure>
+  <div class="cg">
+    <div>
+      <span class="eyebrow">Run a ticket</span>
+      <div class="chips" id="chips" role="group" aria-label="Sample tickets"></div>
+      <div class="ticket" id="ticket"></div>
+      <div class="ctl">
+        <button class="btn primary" id="run">Run<kbd>R</kbd></button>
+        <button class="btn" id="step">Step<kbd>S</kbd></button>
+        <button class="btn" id="reset">Reset<kbd>0</kbd></button>
+        <span class="st" id="status">ready</span>
+      </div>
+      <div class="log" id="log" aria-live="polite"></div>
+    </div>
+    <div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tab-run" aria-selected="true" aria-controls="pane-run">State</button>
+        <button class="tab" role="tab" id="tab-node" aria-selected="false" aria-controls="pane-node">Node</button>
+      </div>
+      <div class="pane" id="pane-run" role="tabpanel">
+        <div class="state" id="state"></div>
+        <div id="intr"></div>
+        <div id="summary"></div>
+      </div>
+      <div class="pane insp" id="pane-node" role="tabpanel" hidden></div>
+    </div>
+  </div>
+</div>
+
+<section id="outcomes">
+  <span class="stage">01</span>
+  <div class="sh">
+    <span class="eyebrow">Three outcomes</span>
+    <h2>Every ticket ends one of three ways.</h2>
+    <p class="lede">The model classifies. A file a human wrote decides what the model is allowed to do with that. Those are two different jobs and they live in two different files.</p>
+  </div>
+  <div class="three">
+    <div class="card"><span class="k">no click</span><span class="lvl L1">L1 auto reply</span>
+      <div class="big num">13<span style="font-size:15px;color:var(--faint);letter-spacing:0"> / 30</span></div>
+      <p>Password, MFA, VPN, printer, Outlook, how-to. Confidence over 0.80. The reply goes out tagged auto.</p>
+      <ul><li>Requester gets the runbook steps, in desk voice</li><li>Ticket tagged <code>auto</code>, so the rate is measurable</li><li>Kill switch: <code>AUTO_REPLY=off</code></li></ul></div>
+    <div class="card"><span class="k">no click</span><span class="lvl L2">L2 / L3 escalate</span>
+      <div class="big num">16<span style="font-size:15px;color:var(--faint);letter-spacing:0"> / 30</span></div>
+      <p>Access, software, hardware, servers, security, firewall changes, outages. Straight to the right queue.</p>
+      <ul><li>Requester gets one line: what is wrong, who has it</li><li>Specialist gets summary, suggested fix, runbook refs</li><li>The model can raise a level, never lower one</li></ul></div>
+    <div class="card"><span class="k">one click</span><span class="lvl L3" style="background:color-mix(in srgb,var(--human) 15%,transparent);color:var(--human)">needs a person</span>
+      <div class="big num">1<span style="font-size:15px;color:var(--faint);letter-spacing:0"> / 30</span></div>
+      <p>Under the confidence gate, a category not on the auto list, or the model wants something from the requester.</p>
+      <ul><li>The draft waits in the dashboard</li><li>Send, redraft with a note, escalate, skip</li><li>Every click is one <code>Command(resume=...)</code></li></ul></div>
+  </div>
+  <div class="note"><b>Those counts are a real run</b> of the 30 sample tickets with <code>ollama:gemma3:4b</code> on the Acer. 30 out of 30 levels matched what a human assigned.</div>
+</section>
+
+<section id="pipeline">
+  <span class="stage">02</span>
+  <div class="sh">
+    <span class="eyebrow">The pipeline</span>
+    <h2>Eleven nodes. Three of them cost money.</h2>
+    <p class="lede">Everything else is plain Python. That is the point of drawing it: you can see exactly where a model is involved and where it is not.</p>
+  </div>
+  <div class="steps">
+    <div class="step"><span></span><span>Node</span><span>What it does</span><span>Who</span></div>
+    <div class="step"><div class="no">01</div><div><b>intake</b></div><div>Marks the ticket as picked up. Good place for dedupe later.</div><div><span class="who a">code</span></div></div>
+    <div class="step"><div class="no">02</div><div><b>triage</b></div><div>Category, level, urgency, confidence, one line summary, questions if stuck. JSON only.</div><div><span class="who a">model</span></div></div>
+    <div class="step"><div class="no">03</div><div><b>retrieve</b></div><div>Finds the runbooks. The one tagged with the category ranks first, BM25 fills the rest.</div><div><span class="who a">code</span></div></div>
+    <div class="step"><div class="no">04</div><div><b>solve</b></div><div>Numbered fix steps from the runbooks only. Ends with the line that says when to escalate.</div><div><span class="who a">model</span></div></div>
+    <div class="step"><div class="no">05</div><div><b>draft</b></div><div>The reply. Desk tech voice: problem as a fact, then do this, then what to answer if it fails.</div><div><span class="who a">model</span></div></div>
+    <div class="step"><div class="no">06</div><div><b>gate</b></div><div><code>policy.decide</code>: auto, escalate or review. No model touches this decision.</div><div><span class="who a">code</span></div></div>
+    <div class="step"><div class="no">07</div><div><b>auto_send · escalate · human_review</b></div><div>Reply, or note plus hand over, or pause. The pause is saved in SQLite, so the click can come an hour later.</div><div><span class="who h">person, if needed</span></div></div>
+  </div>
+</section>
+
+<section id="brains">
+  <span class="stage">03</span>
+  <div class="sh">
+    <span class="eyebrow">Brains</span>
+    <h2>Claude, Ollama, or both. Two lines in a config file.</h2>
+    <p class="lede">LangGraph runs the flowchart. It does not care whose brain sits in the box. The demo still runs with no brain at all, which is the only reason I will plug this into a projector.</p>
+  </div>
+  <div class="tscroll"><table class="tbl">
+    <tr><th>Setup</th><th>Config</th><th>Good for</th><th>Cost</th><th>Speed on the Acer</th></tr>
+    <tr><td>All local</td><td><code>MODEL=ollama:gemma3:4b</code></td><td>zero bills, works with the wifi down</td><td>$0</td><td>about 20 s / ticket</td></tr>
+    <tr><td>Split</td><td><code>MODEL_TRIAGE=ollama:gemma3:4b</code><br><code>MODEL_DRAFT=anthropic:claude-sonnet-5</code></td><td>cheap local read, best writing on the reply</td><td>under a cent</td><td>about 10 s</td></tr>
+    <tr><td>All Claude</td><td><code>MODEL=anthropic:claude-sonnet-5</code></td><td>best triage, best replies</td><td>about a cent</td><td>about 8 s</td></tr>
+    <tr><td>No brain</td><td><code>MODEL=fake:rules</code></td><td>weighted keyword rules and runbook text. Any failed call drops to this on its own, mid run.</td><td>$0</td><td>instant</td></tr>
+  </table></div>
+  <div class="note">Measured with <code>eval.bat</code>, which scores triage against the 30 sample tickets and prints <b>levels right: N / 30</b>. Rules alone already score 30 / 30 on this set, which says more about the sample set than about the rules.</div>
+</section>
+
+<section id="human">
+  <span class="stage">04</span>
+  <div class="sh">
+    <span class="eyebrow">What the human sees</span>
+    <h2>One page. A queue, a ticket, and a reason.</h2>
+    <p class="lede">Anything that needs a person floats to the top. Every triage carries one line explaining why it went where it went, because "the model decided" is not an answer anyone accepts at a change board.</p>
+  </div>
+  <div class="mock" aria-label="Dashboard sketch">
+    <div class="bar"><b>ticketdesk</b><span class="tag">triage ollama:gemma3:4b</span><span class="tag">draft claude-sonnet-5</span><span class="tag on">auto reply on</span><span class="tag on">auto escalate on</span><span class="tag">gate 0.80</span><span class="tag" style="margin-left:auto">+ New ticket</span><span class="tag">Run agent</span></div>
+    <div class="grid">
+      <div class="q">
+        <div class="sel"><span class="id">INC-1007</span><span class="lvl L1">L1</span><span>How do I set up VPN on the new laptop</span></div>
+        <div><span class="id">INC-1001</span><span class="lvl L1">L1</span><span>Locked out of my account</span></div>
+        <div><span class="id">INC-1019</span><span class="lvl L2">L2</span><span>Laptop will not turn on</span></div>
+        <div><span class="id">INC-1029</span><span class="lvl L3">L3</span><span>Email is down for everyone</span></div>
+      </div>
+      <div class="d">
+        <div><b>INC-1007 &nbsp;·&nbsp; How do I set up VPN on the new laptop</b><br><span class="muted">sara.kim@northline.com · vpn · vpn-globalprotect.md</span></div>
+        <div class="why">L1 vpn, confidence 0.70 is under 0.80, so a person decides</div>
+        <div class="muted" style="font-family:var(--f-mono);font-size:12px;line-height:1.6">Hi Sara,<br><br>First time VPN setup on the new laptop.<br><br>Do this:<br>1. Open Software Center, install GlobalProtect.<br>2. Portal: vpn.northline.com.<br>3. Sign in with your normal account, approve the MFA prompt.</div>
+        <div class="btns"><span class="g">Send this reply</span><span>Redraft with my note</span><span>Escalate to L2</span><span class="r">Skip</span></div>
+      </div>
+    </div>
+  </div>
+  <ul class="tight">
+    <li><b>+ New ticket</b> lets a judge type their own. It is triaged on the spot, same path as the rest.</li>
+    <li><b>Last model calls</b> shows seconds per call, so Ollama and Claude can be compared live on stage.</li>
+    <li><b>Reset demo</b> puts the 30 samples back and wipes the graph memory, for the second run.</li>
+    <li>Real system later: <code>TICKET_SOURCE=freshservice</code> and a key. Same graph, same page.</li>
+  </ul>
+</section>
+
+<section id="code">
+  <span class="stage">05</span>
+  <div class="sh">
+    <span class="eyebrow">Code map</span>
+    <h2>Where LangGraph actually is.</h2>
+    <p class="lede">About 140 lines in <code>graph.py</code>. Everything around it is plain Python. Click any node in the graph above for the real source of that node.</p>
+  </div>
+  <div class="two">
+    <div>
+      <h3>The state, one dict per ticket</h3>
+      <div class="codebox named"><span class="fname">graph.py</span><pre class="code"><code data-src="state" data-lang="py"></code></pre></div>
+      <h3 style="margin-top:26px">The gate: policy, not the model</h3>
+      <div class="codebox named"><span class="fname">policy.py</span><pre class="code"><code data-src="decide" data-lang="py"></code></pre></div>
+    </div>
+    <div>
+      <h3>The pause and the click</h3>
+      <div class="codebox named"><span class="fname">graph.py</span><pre class="code"><code data-src="review" data-lang="py"></code></pre></div>
+      <h3 style="margin-top:26px">Any ticket system, five methods</h3>
+      <div class="codebox named"><span class="fname">adapters/__init__.py</span><pre class="code"><code data-src="adapter" data-lang="py"></code></pre></div>
+    </div>
+  </div>
+  <h3 style="margin-top:26px">The whole graph</h3>
+  <div class="codebox named"><span class="fname">graph.py</span><pre class="code"><code data-src="builder" data-lang="py"></code></pre></div>
+  <div class="note"><b>Memory:</b> <code>SqliteSaver</code>, one <code>thread_id</code> per ticket. A ticket paused at <code>human_review</code> survives a restart, and the dashboard answers it later with <code>graph.invoke(Command(resume={"action": "send"}))</code>.</div>
+</section>
+
+<section id="demo">
+  <span class="stage">06</span>
+  <div class="sh">
+    <span class="eyebrow">Demo script</span>
+    <h2>Two minutes, in this order.</h2>
+  </div>
+  <div class="script">
+    <div><b>0:00</b><span>Dashboard open, 30 tickets, nothing touched. <strong>"This is a Monday morning queue at a two office company."</strong></span></div>
+    <div><b>0:15</b><span>Press <span class="kbd">Run agent</span>. Levels appear, the queue sorts itself, counts land at 13 auto, 16 escalated, 1 waiting.</span></div>
+    <div><b>0:45</b><span>Open an <span class="lvl L1">L1</span> auto reply. Read it out loud. Point at the why line: confident, safe category, sent.</span></div>
+    <div><b>1:05</b><span>Open the <span class="lvl L3">L3</span>. <strong>"It did not try to fix an outage. It wrote the incident note and handed over."</strong></span></div>
+    <div><b>1:25</b><span>Open the one that needs a person. Type a note, Redraft, then Send. That is the human in the loop, in one click.</span></div>
+    <div><b>1:45</b><span>Ask a judge for a ticket. <span class="kbd">+ New ticket</span>, type it, watch it land. Point at the model chips: Ollama on this laptop, Claude in the cloud, same graph.</span></div>
+  </div>
+</section>
+
+<section id="questions">
+  <span class="stage">07</span>
+  <div class="sh">
+    <span class="eyebrow">Open questions</span>
+    <h2>Answer these Saturday morning.</h2>
+    <p class="lede">Each one changes something I build. Ticks are saved in this browser only.</p>
+  </div>
+  <div class="qs" id="qs"></div>
+</section>
+
+<section id="plan">
+  <span class="stage">08</span>
+  <div class="sh">
+    <span class="eyebrow">48 hours</span>
+    <h2>The plan.</h2>
+  </div>
+  <div class="plan">
+    <div class="card"><b class="t">Sat morning</b><ul><li>Answer the questions above</li><li>Switch brains, run eval for each, write the numbers on this page</li><li>Rehearse the run once cold</li></ul></div>
+    <div class="card"><b class="t">Sat afternoon</b><ul><li>Swap the sample runbooks for real ones</li><li>Tune the triage prompt on whatever misses</li><li>Wire the real ticket source if there is one</li></ul></div>
+    <div class="card"><b class="t">Sun morning</b><ul><li>Dashboard polish for the projector</li><li>Two minute script, twice, on the clock</li><li>Offline dry run with the wifi off</li></ul></div>
+    <div class="card"><b class="t">Sun afternoon</b><ul><li>Present from the dashboard, this page as backup</li><li>Ollama mode as the no internet fallback</li><li>Ship the zip to the team</li></ul></div>
+  </div>
+  <div class="sh" style="margin-top:44px">
+    <span class="eyebrow">Stepping stone</span>
+    <h2>Same shape, three jobs.</h2>
+    <p class="lede">The hackathon build is the middle rung. The work version on either side uses the same pattern, the same adapters and the same pause.</p>
+  </div>
+  <div class="ladder">
+    <div class="card"><small>v1 · work · firewall changes</small><h3>Reads the ticket, writes the change, keeps the timer. People review, approve and push.</h3><p class="muted" style="margin-top:8px;font-size:13px">Five pauses. The agent has zero firewall access.</p></div>
+    <div class="card"><small>v2 · work · runbooks</small><h3>Reads documentation and meeting notes, writes runbooks, keeps them current.</h3><p class="muted" style="margin-top:8px;font-size:13px">The runbooks this triage agent reads come from there.</p></div>
+    <div class="card now"><small>v3 · this weekend · ticket triage</small><h3>Reads the ticket, picks the level, answers L1, escalates L2 and L3.</h3><p class="muted" style="margin-top:8px;font-size:13px">One pause. The adapter makes it a Freshservice agent on Monday.</p></div>
+  </div>
+</section>
+
+<section id="start">
+  <span class="stage">09</span>
+  <div class="sh">
+    <span class="eyebrow">Start</span>
+    <h2>Ten minutes on a clean machine.</h2>
+  </div>
+  <div class="two">
+    <div class="codebox named"><span class="fname">Windows</span><pre class="code"><code data-src="start" data-lang="sh"></code></pre><button class="copy" data-copy="start">Copy</button></div>
+    <div class="codebox named"><span class="fname">.env</span><pre class="code"><code data-src="env" data-lang="sh"></code></pre><button class="copy" data-copy="env">Copy</button></div>
+  </div>
+  <div class="note">Mac is the same three files: <code>bash setup.sh</code>, <code>bash run_ui.sh</code>, and Ollama through <code>brew install ollama &amp;&amp; ollama pull gemma3:4b</code>.</div>
+</section>
+
+<div class="foot">
+  <span>ticketdesk · hackathon build · LangGraph 1.x, FastAPI, Ollama, Claude</span>
+  <span>the simulator above is scripted from real runs; the dashboard is the live one</span>
+</div>
+</div>
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ---------------- Source shown on the page (from the real files) ---------------- */
+const PY={};
+PY.state=String.raw`class State(TypedDict):
+    ticket: dict            # id, subject, body, requester
+    triage: dict            # category, level, urgency, confidence, summary, missing_info, model
+    hits: list[dict]        # matching runbooks
+    solution: str           # engineer view: numbered steps
+    draft: str              # requester view: the reply
+    decision: str           # auto | escalate | review
+    edit_note: str          # what the reviewer asked to change
+    outcome: str            # auto_replied | replied | escalated_L2 | escalated_L3 | skipped
+    notes: Annotated[list[str], operator.add]`;
+PY.decide=String.raw`AUTO_OK = {"password", "mfa", "vpn", "printer", "email", "how_to"}
+
+def decide(triage: dict) -> str:
+    """auto = reply with no click. escalate = hand over with a note. review = a person decides."""
+    level, category = triage["level"], triage["category"]
+    conf = float(triage.get("confidence", 0))
+    threshold = float(os.getenv("AUTO_MIN_CONFIDENCE", "0.8"))
+    if triage.get("missing_info"):
+        return "review"
+    if level == "L1":
+        if flag("AUTO_REPLY") and category in AUTO_OK and conf >= threshold:
+            return "auto"
+        return "review"
+    if flag("AUTO_ESCALATE") and conf >= threshold:
+        return "escalate"
+    return "review"`;
+PY.review=String.raw`def gate(state: State) -> Command[Literal["auto_send", "escalate", "human_review"]]:
+    d = policy.decide(state["triage"]) if not state.get("edit_note") else "review"
+    return Command(goto={"auto": "auto_send", "escalate": "escalate", "review": "human_review"}[d],
+                   update={"decision": d})
+
+def human_review(state: State) -> Command[Literal["send", "draft", "escalate", "log"]]:
+    answer = interrupt({"ticket": state["ticket"], "triage": state["triage"], "draft": state["draft"]})
+    action = answer.get("action", "skip")
+    if action == "send":
+        return Command(goto="send", update={"draft": answer.get("text") or state["draft"]})
+    if action == "edit":
+        return Command(goto="draft", update={"edit_note": answer.get("note", "")})
+    if action == "escalate":
+        tri = {**state["triage"], "level": answer.get("level") or ("L2" if state["triage"]["level"] == "L1" else state["triage"]["level"])}
+        return Command(goto="escalate", update={"triage": tri})
+    return Command(goto="log", update={"outcome": "skipped"})
+
+# the dashboard button, one line in runner.py:
+graph.invoke(Command(resume={"action": "send", "text": edited}), {"configurable": {"thread_id": ticket_id}})`;
+PY.adapter=String.raw`class TicketSystem(Protocol):
+    def new_tickets(self) -> list[dict]: ...                                   # tickets nobody touched yet
+    def get(self, ticket_id: str) -> dict: ...
+    def reply(self, ticket_id: str, text: str, auto: bool = False) -> None: ... # public reply to the requester
+    def escalate(self, ticket_id: str, level: str, note: str) -> None: ...     # assign to L2/L3 with a private note
+    def set_stage(self, ticket_id: str, stage: str, **fields) -> None: ...     # progress + agent output, for the UI
+
+# adapters/local_store.py   the demo, a JSON file
+# adapters/freshservice.py  the real thing, API v2: /tickets, /tickets/{id}/reply, /notes, PUT group_id`;
+PY.builder=String.raw`def builder(system: TicketSystem) -> StateGraph:
+    b = StateGraph(State)
+    for name, fn in make_nodes(system).items():      # intake, triage, retrieve, solve, draft, gate,
+        b.add_node(name, fn)                          # human_review, auto_send, send, escalate, log
+    b.add_edge(START, "intake")
+    b.add_edge("intake", "triage")
+    b.add_edge("triage", "retrieve")
+    b.add_edge("retrieve", "solve")
+    b.add_edge("solve", "draft")
+    b.add_edge("draft", "gate")
+    # gate and human_review route themselves with Command(goto=...)
+    b.add_edge("auto_send", "log")
+    b.add_edge("send", "log")
+    b.add_edge("escalate", "log")
+    b.add_edge("log", END)
+    return b
+
+def build_graph(system: TicketSystem):
+    conn = sqlite3.connect("ticketdesk.db", check_same_thread=False)
+    return builder(system).compile(checkpointer=SqliteSaver(conn))   # memory: one thread per ticket`;
+PY.start=String.raw`# unzip ticketdesk.zip into Documents, then double click:
+setup.bat        # venv, pip install, runs the smoke tests with no model
+run_ui.bat       # dashboard on http://localhost:8000
+install_ollama.bat   # only if this PC has no Ollama yet (the Acer has it)
+eval.bat         # levels right / 30 for the brain in .env
+chart.bat        # draws the graph`;
+PY.env=String.raw`MODEL_TRIAGE=ollama:gemma3:4b
+MODEL_DRAFT=anthropic:claude-sonnet-5
+ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_WORKSPACE_ID=wrkspc_...
+AUTO_REPLY=on
+AUTO_ESCALATE=on
+AUTO_MIN_CONFIDENCE=0.8
+TICKET_SOURCE=local`;
+PY.nodes={
+ intake:String.raw`def intake(state: State) -> dict:
+    t = state["ticket"]
+    system.set_stage(t["id"], "triage")
+    return {"notes": [f"intake {t['id']}"]}`,
+ triage:String.raw`def triage(state: State) -> dict:
+    tri = models.triage(state["ticket"])       # JSON: category, level, urgency, confidence, summary, missing_info
+    system.set_stage(state["ticket"]["id"], "retrieve", triage=tri)
+    return {"triage": tri, "notes": [f"triage {tri['category']} {tri['level']} {tri['confidence']:.2f}"]}
+
+# models.triage: one prompt, JSON only, then policy.final_level() so the model can raise a level, never lower it.
+# Bad JSON or a dead model: keyword rules take over for this step, the run never dies.`,
+ retrieve:String.raw`def retrieve(state: State) -> dict:
+    t, tri = state["ticket"], state["triage"]
+    hits = kb.search(f"{t['subject']} {t['body']}", k=3, category=tri["category"])
+    system.set_stage(t["id"], "solve", hits=[{"title": h["title"], "path": h["path"], "score": h["score"]} for h in hits])
+    return {"hits": hits, "notes": [f"kb {[h['path'] for h in hits]}"]}
+
+# kb.py: every .md in kb/ is a runbook. BM25, no vector database. The runbook tagged with the category ranks first.`,
+ solve:String.raw`def solve(state: State) -> dict:
+    sol = models.solve(state["ticket"], state["triage"], state["hits"])   # numbered steps from the runbooks only
+    system.set_stage(state["ticket"]["id"], "draft", solution=sol)
+    return {"solution": sol}`,
+ draft:String.raw`def draft(state: State) -> dict:
+    text = models.draft(state["ticket"], state["triage"], state["solution"], state["hits"], state.get("edit_note", ""))
+    system.set_stage(state["ticket"]["id"], "gate", draft=text)
+    return {"draft": text}
+
+# On an edit round the reviewer's note goes into the prompt and the same node runs again.`,
+ gate:String.raw`def gate(state: State) -> Command[Literal["auto_send", "escalate", "human_review"]]:
+    d = policy.decide(state["triage"]) if not state.get("edit_note") else "review"   # an edited draft always goes back to the person
+    system.set_stage(state["ticket"]["id"], {"auto": "auto_send", "escalate": "escalate", "review": "waiting"}[d], decision=d)
+    return Command(goto={"auto": "auto_send", "escalate": "escalate", "review": "human_review"}[d], update={"decision": d})`,
+ human_review:String.raw`def human_review(state: State) -> Command[Literal["send", "draft", "escalate", "log"]]:
+    answer = interrupt({"ticket": state["ticket"], "triage": state["triage"], "solution": state["solution"], "draft": state["draft"]})
+    action = answer.get("action", "skip")
+    if action == "send":
+        return Command(goto="send", update={"draft": answer.get("text") or state["draft"], "notes": ["human: send"]})
+    if action == "edit":
+        return Command(goto="draft", update={"edit_note": answer.get("note", ""), "notes": [f"human: edit {answer.get('note', '')}"]})
+    if action == "escalate":
+        tri = {**state["triage"], "level": answer.get("level") or ("L2" if state["triage"]["level"] == "L1" else state["triage"]["level"])}
+        return Command(goto="escalate", update={"triage": tri, "notes": ["human: escalate"]})
+    return Command(goto="log", update={"outcome": "skipped", "notes": ["human: skip"]})`,
+ auto_send:String.raw`def auto_send(state: State) -> dict:
+    system.reply(state["ticket"]["id"], state["draft"] + "\n\n[sent automatically, L1 runbook answer]", auto=True)
+    return {"outcome": "auto_replied"}`,
+ send:String.raw`def send(state: State) -> dict:
+    system.reply(state["ticket"]["id"], state["draft"], auto=False)
+    return {"outcome": "replied"}`,
+ escalate:String.raw`def escalate(state: State) -> dict:
+    t, tri = state["ticket"], state["triage"]
+    level = tri["level"] if tri["level"] in {"L2", "L3"} else "L2"
+    by = "a reviewer via ticketdesk" if any(n.startswith("human: escalate") for n in state["notes"]) else "ticketdesk"
+    system.reply(t["id"], models.ack_text(t, {**tri, "level": level}), auto=True)               # one line: what is wrong, who has it now
+    system.escalate(t["id"], level, models.escalation_note(t, {**tri, "level": level}, state["solution"], state["hits"], by=by))
+    return {"outcome": f"escalated_{level}"}`,
+ log:String.raw`def log(state: State) -> dict:
+    extra = {"status": "skipped"} if state.get("outcome") == "skipped" else {}
+    system.set_stage(state["ticket"]["id"], "done", outcome=state.get("outcome", ""), agent_notes=state["notes"], **extra)
+    return {}`,
+};
+const NODE_ORDER=['intake','triage','retrieve','solve','draft','gate','human_review','auto_send','send','escalate','log'];
+
+/* ---------------- Highlighter ---------------- */
+const PY_RE=/(#[^\n]*)|("""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')|(@[A-Za-z_][\w.]*)|\b(def|class)\s+([A-Za-z_]\w*)|\b(return|if|elif|else|for|in|not|and|or|import|from|as|with|try|except|raise|lambda|yield|async|await|pass|while|is|del|assert|finally|break|continue|global|None|True|False)\b|(\b\d+(?:\.\d+)?\b)|\b([A-Z][A-Za-z0-9_]+)\b|\b(self|cls|str|int|float|bool|dict|list|print|len|isinstance|range|any|all|max|min|sorted|open|tuple|set|input|eval)\b/g;
+function hlPy(src){
+  return esc(src).replace(PY_RE,(m,cm,str,dec,dk,dn,kw,num,cls,bi)=>{
+    if(cm)return `<span class="c">${m}</span>`;
+    if(str)return `<span class="s">${m}</span>`;
+    if(dec)return `<span class="d">${m}</span>`;
+    if(dk)return `<span class="k">${dk}</span> <span class="f">${dn}</span>`;
+    if(kw)return `<span class="k">${m}</span>`;
+    if(num)return `<span class="n">${m}</span>`;
+    if(cls)return `<span class="cl">${m}</span>`;
+    if(bi)return `<span class="b">${m}</span>`;
+    return m;
+  });
+}
+function hlSh(src){return esc(src).replace(/(#[^\n]*)|("(?:\\.|[^"\\\n])*")|(^\w+(?==))/gm,(m,c,s,k)=>c?`<span class="c">${m}</span>`:s?`<span class="s">${m}</span>`:`<span class="d">${m}</span>`);}
+const hl=(src,lang)=>lang==='sh'?hlSh(src):hlPy(src);
+const srcOf=k=>PY[k];
+
+/* ---------------- Graph spec ---------------- */
+const NODES=[
+ {id:'START',kind:'term',x:40,y:110,purpose:'graph.invoke starts a thread. The thread id is the ticket id.',reads:'ticket',writes:'',gotcha:'One ticket, one thread. The dashboard click later goes to the same thread.'},
+ {id:'intake',kind:'det',x:150,y:110,purpose:'Marks the ticket as picked up. No model.',reads:'ticket',writes:'notes',gotcha:'Free and always right. Good place for dedupe later.'},
+ {id:'triage',kind:'llm',x:320,y:110,purpose:'The model reads the ticket and answers with JSON: category, level, urgency, confidence, one line summary, questions if it is stuck.',reads:'ticket',writes:'triage',gotcha:'The model can raise a level, never lower one. Bad JSON or a dead model: keyword rules take over for this step.'},
+ {id:'retrieve',kind:'tool',x:490,y:110,purpose:'Finds up to three runbooks. The runbook tagged with the category comes first, BM25 text search fills the rest.',reads:'ticket, triage',writes:'hits',gotcha:'No vector database. Thirteen markdown files. Replace them with the real runbooks on Saturday.'},
+ {id:'solve',kind:'llm',x:660,y:110,purpose:'Engineer view: numbered fix steps from the runbooks only, ending with "Escalate if".',reads:'ticket, triage, hits',writes:'solution',gotcha:'Runbooks in, steps out. If nothing matched it says so and names the owner.'},
+ {id:'draft',kind:'llm',x:830,y:110,purpose:'Requester view: the reply. Desk tech voice: the problem in one line, Do this, steps, what to answer if it fails. No empathy filler.',reads:'ticket, solution, edit_note',writes:'draft',gotcha:'On an edit round the reviewer note goes into the prompt and this node runs again.'},
+ {id:'gate',kind:'det',x:1000,y:110,purpose:'policy.decide picks auto, escalate or review. A file a human wrote. No model.',reads:'triage, edit_note',writes:'decision',gotcha:'AUTO_REPLY=off in .env and every reply waits for a person. That is the kill switch.'},
+ {id:'human_review',kind:'human',x:660,y:300,purpose:'Pause. The dashboard shows the draft. Send, redraft with a note, escalate, or skip.',reads:'draft, triage',writes:'then Command(goto=)',gotcha:'interrupt() saves the thread in SQLite. The click can come an hour later, after a restart.'},
+ {id:'escalate',kind:'tool',x:830,y:300,purpose:'One line to the requester: what is wrong, who has it now. Private note with summary, suggested fix and runbook refs. Ticket moves to the L2 or L3 queue.',reads:'ticket, triage, solution, hits',writes:'outcome',gotcha:'The note is the value: the specialist starts with the facts, not from zero.'},
+ {id:'auto_send',kind:'tool',x:1000,y:300,purpose:'Sends the draft to the requester, tagged auto.',reads:'draft',writes:'outcome',gotcha:'Only L1, only the safe categories, only over the confidence gate. The tag is your metric.'},
+ {id:'send',kind:'tool',x:490,y:300,purpose:'Sends the reply a person approved, edits included.',reads:'draft',writes:'outcome',gotcha:'Same adapter call as auto_send, different tag.'},
+ {id:'log',kind:'det',x:490,y:400,purpose:'Writes the outcome and the agent notes on the ticket.',reads:'outcome, notes',writes:'',gotcha:'Every run is auditable: what the model said, what the policy decided, who clicked.'},
+ {id:'END',kind:'term',x:380,y:400,purpose:'Done. The thread stays in the checkpoint.',reads:'',writes:'',gotcha:'graph.get_state(config).values is the whole story of the ticket.'},
+];
+const EDGES=[
+ {from:'START',to:'intake',pts:[[54,110],[85,110]]},
+ {from:'intake',to:'triage',pts:[[215,110],[255,110]]},
+ {from:'triage',to:'retrieve',pts:[[385,110],[425,110]]},
+ {from:'retrieve',to:'solve',pts:[[555,110],[595,110]]},
+ {from:'solve',to:'draft',pts:[[725,110],[765,110]]},
+ {from:'draft',to:'gate',pts:[[895,110],[935,110]]},
+ {from:'gate',to:'auto_send',cond:1,pts:[[1000,130],[1000,280]],label:'L1 and sure',lx:1008,ly:205,anchor:'start'},
+ {from:'gate',to:'escalate',cond:1,pts:[[985,130],[985,210],[830,210],[830,280]],label:'L2 or L3',lx:905,ly:203,anchor:'middle'},
+ {from:'gate',to:'human_review',cond:1,pts:[[970,130],[970,180],[660,180],[660,280]],label:'not sure',lx:815,ly:173,anchor:'middle'},
+ {from:'human_review',to:'send',cmd:1,pts:[[595,300],[555,300]],label:'send',lx:575,ly:334,anchor:'middle'},
+ {from:'human_review',to:'escalate',cmd:1,pts:[[725,300],[765,300]],label:'escalate',lx:745,ly:334,anchor:'middle'},
+ {from:'human_review',to:'draft',cmd:1,pts:[[645,280],[645,150],[800,150],[800,130]],label:'edit, redraft',lx:722,ly:143,anchor:'middle'},
+ {from:'human_review',to:'log',cmd:1,pts:[[655,320],[655,360],[500,360],[500,380]],label:'skip',lx:585,ly:353,anchor:'middle'},
+ {from:'send',to:'log',pts:[[490,320],[490,380]]},
+ {from:'escalate',to:'log',pts:[[830,320],[830,400],[555,400]]},
+ {from:'auto_send',to:'log',pts:[[1000,320],[1000,400],[555,400]]},
+ {from:'log',to:'END',pts:[[425,400],[394,400]]},
+];
+const KIND_NAME={llm:'model',det:'plain code',tool:'ticket system',human:'waits for a person',term:'boundary'};
+
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+function pathFrom(pts,r=9){
+  if(pts.length<3)return `M${pts[0][0]},${pts[0][1]} L${pts[1][0]},${pts[1][1]}`;
+  let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=1;i<pts.length-1;i++){
+    const [px,py]=pts[i-1],[cx,cy]=pts[i],[nx,ny]=pts[i+1];
+    const d1=Math.hypot(cx-px,cy-py),d2=Math.hypot(nx-cx,ny-cy),rr=Math.min(r,d1/2,d2/2);
+    d+=` L${cx-(cx-px)/d1*rr},${cy-(cy-py)/d1*rr} Q${cx},${cy} ${cx+(nx-cx)/d2*rr},${cy+(ny-cy)/d2*rr}`;
+  }
+  const l=pts[pts.length-1];return d+` L${l[0]},${l[1]}`;
+}
+const nodeEls={},edgeEls={},sparkEls={};
+function renderGraph(){
+  const svg=$('#g');
+  const defs=el('defs',{},svg);
+  for(const [id,cls] of [['arr','arr'],['arr-on','arr-on']]){
+    const m=el('marker',{id,viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto'},defs);
+    el('path',{d:'M0,0 L10,5 L0,10 z',class:cls},m);
+  }
+  const ge=el('g',{},svg),gs=el('g',{},svg),gl=el('g',{},svg),gn=el('g',{},svg);
+  EDGES.forEach(e=>{
+    const p=el('path',{d:pathFrom(e.pts),class:'edge'+(e.cond?' cond':'')+(e.cmd?' cmd':''),'marker-end':'url(#arr)'},ge);
+    edgeEls[e.from+'>'+e.to]=p;
+    sparkEls[e.from+'>'+e.to]=el('path',{d:pathFrom(e.pts),class:'spark',pathLength:'100'},gs);
+    if(e.label){
+      const w=e.label.length*6.4+10,x=e.anchor==='start'?e.lx-4:e.anchor==='end'?e.lx-w+4:e.lx-w/2;
+      el('rect',{x,y:e.ly-11,width:w,height:15,rx:3,class:'elabel-bg'},gl);
+      const t=el('text',{x:e.lx,y:e.ly,'text-anchor':e.anchor,class:'elabel'},gl);t.textContent=e.label;
+    }
+  });
+  NODES.forEach(n=>{
+    const g=el('g',{class:'node k-'+n.kind,'data-id':n.id,tabindex:'0',role:'button','aria-label':n.id+', '+KIND_NAME[n.kind]},gn);
+    if(n.kind==='term'){
+      el('circle',{cx:n.x,cy:n.y,r:14,class:'box'},g);
+      el('circle',{cx:n.x,cy:n.y,r:14,class:'ping',style:'transform-origin:'+n.x+'px '+n.y+'px'},g);
+      const t=el('text',{x:n.x,y:n.y+32,'text-anchor':'middle',class:'lbl'},g);t.textContent=n.id;
+    }else{
+      el('rect',{x:n.x-65,y:n.y-20,width:130,height:40,rx:8,class:'box'},g);
+      el('rect',{x:n.x-65,y:n.y-20,width:130,height:40,rx:8,class:'ping',style:'transform-origin:'+n.x+'px '+n.y+'px'},g);
+      el('rect',{x:n.x-60,y:n.y-12,width:4,height:24,rx:2,class:'stripe'},g);
+      const t=el('text',{x:n.x+3,y:n.y+4,'text-anchor':'middle',class:'lbl'},g);t.textContent=n.id;
+    }
+    nodeEls[n.id]=g;
+    g.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();showNode(n.id);}});
+  });
+  svg.addEventListener('click',ev=>{const g=ev.target.closest&&ev.target.closest('.node');if(g)showNode(g.getAttribute('data-id'));});
+}
+
+/* ---------------- Node inspector ---------------- */
+function showNode(id){
+  const i=NODES.findIndex(x=>x.id===id),n=NODES[i];
+  Object.values(nodeEls).forEach(g=>g.classList.remove('sel'));nodeEls[id].classList.add('sel');
+  const code=PY.nodes[id]||null;
+  $('#pane-node').innerHTML=`
+    <div class="pick"><button class="btn" id="np-prev"${i===0?' disabled':''}>Prev</button><select id="np-sel" class="sel" aria-label="Pick a node">${NODES.map(x=>`<option value="${x.id}"${x.id===id?' selected':''}>${x.id}</option>`).join('')}</select><button class="btn" id="np-next"${i===NODES.length-1?' disabled':''}>Next</button></div>
+    <div class="hd"><h3>${esc(id)}</h3><span class="pill p-${n.kind}">${KIND_NAME[n.kind]}</span></div>
+    <p class="purpose">${esc(n.purpose)}</p>
+    ${n.reads||n.writes?`<div class="rw"><div><span>reads</span>${esc(n.reads||'nothing')}</div><div><span>writes</span>${esc(n.writes||'nothing')}</div></div>`:''}
+    <div class="gotcha">${esc(n.gotcha)}</div>
+    ${code?`<div class="codebox"><pre class="code"><code>${hl(code,'py')}</code></pre></div>`:''}`;
+  if(i>0)$('#np-prev').addEventListener('click',()=>showNode(NODES[i-1].id));
+  if(i<NODES.length-1)$('#np-next').addEventListener('click',()=>showNode(NODES[i+1].id));
+  $('#np-sel').addEventListener('change',e=>showNode(e.target.value));
+  setTab('node');
+}
+function setTab(which){
+  const run=which==='run';
+  $('#tab-run').setAttribute('aria-selected',run);$('#tab-node').setAttribute('aria-selected',!run);
+  $('#pane-run').hidden=!run;$('#pane-node').hidden=run;
+}
+$('#tab-run').addEventListener('click',()=>setTab('run'));
+$('#tab-node').addEventListener('click',()=>{if(!$('#pane-node').innerHTML)showNode('triage');setTab('node');});
+
+/* ---------------- Scenarios (scripted from real runs; no model or API calls here) ---------------- */
+const endStep={node:'END',dur:0,note:'thread kept in checkpoint'};
+const logStep={node:'log',dur:.05,note:'outcome and notes written on the ticket'};
+function head(id,tri,hits,solution,draft,triNote,solveNote){return [
+  {node:'intake',dur:.1,delta:{notes:['intake '+id]},note:'store.set_stage(triage)'},
+  {node:'triage',dur:1.8,delta:{triage:tri},note:triNote},
+  {node:'retrieve',dur:.1,delta:{hits:hits},note:'runbook tagged '+tri.category+' first, BM25 for the rest'},
+  {node:'solve',dur:2.4,delta:{solution:solution},note:solveNote||'steps from the runbook only'},
+  {node:'draft',dur:2.1,delta:{draft:draft},note:'requester facing reply'},
+];}
+function escalateSteps(level,note,outcome){return [
+  {node:'escalate',dur:.4,delta:{outcome:outcome,notes:['ack sent to requester','private note + moved to the '+level+' queue']},note:note},
+  logStep,endStep];}
+function reviewPause(id,tri,draft2,note2){
+  const opts=[
+   {label:'Send this reply',resume:'{"action": "send"}',gap:'+12 min',next:[
+     {node:'human_review',dur:.1,resume:true,delta:{notes:['human: send']},note:'Command(goto="send")'},
+     {node:'send',dur:.3,delta:{outcome:'replied'},note:'system.reply(auto=False)'},logStep,endStep]},
+   {label:'Redraft: '+note2,resume:'{"action": "edit", "note": "'+note2+'"}',gap:'+12 min',next:[
+     {node:'human_review',dur:.1,resume:true,delta:{edit_note:note2,notes:['human: edit '+note2]},note:'Command(goto="draft")'},
+     {node:'draft',dur:2.2,delta:{draft:draft2},note:'same node again, the note is in the prompt'},
+     {node:'gate',dur:.05,route:'edit_note set → review',delta:{decision:'review'},note:'an edited draft always goes back to the person'},
+     {node:'human_review',dur:.05,interrupt:{ticket:id,level:tri.level,category:tri.category,draft:'(draft v2, shown in the dashboard)',options:['send','edit','escalate','skip']},note:'interrupt() · dashboard shows draft v2',
+      options:[{label:'Send this reply',resume:'{"action": "send"}',gap:'+2 min',next:[
+        {node:'human_review',dur:.1,resume:true,delta:{notes:['human: send']},note:'Command(goto="send")'},
+        {node:'send',dur:.3,delta:{outcome:'replied'},note:'system.reply(auto=False)'},logStep,endStep]}]}]},
+   {label:'Escalate to L2',resume:'{"action": "escalate", "level": "L2"}',gap:'+12 min',next:[
+     {node:'human_review',dur:.1,resume:true,delta:{triage:{...tri,level:'L2'},notes:['human: escalate']},note:'Command(goto="escalate")'},
+     ...escalateSteps('L2','ack + private note, L2 queue','escalated_L2')]},
+   {label:'Skip',resume:'{"action": "skip"}',gap:'+12 min',next:[
+     {node:'human_review',dur:.1,resume:true,delta:{outcome:'skipped',notes:['human: skip']},note:'Command(goto="log")'},logStep,endStep]},
+  ];
+  return {node:'human_review',dur:.05,interrupt:{ticket:id,level:tri.level,category:tri.category,confidence:tri.confidence,draft:'(shown in the dashboard)',options:['send','edit','escalate','skip']},note:'interrupt() · saved in SQLite · dashboard says "needs a person"',options:opts};
+}
+const SCENARIOS=[
+ {id:'INC-1001',tag:'L1 auto reply',requester:'maria.lopez@northline.com',channel:'portal',subject:'Locked out of my account',
+  body:'I typed my password wrong a few times this morning and now it says my account is locked. I have a client call at 10.',
+  steps:[...head('INC-1001',
+    {category:'password',level:'L1',urgency:'high',confidence:0.93,summary:'Account locked after wrong password attempts, call at 10',missing_info:[],model:'ollama:gemma3:4b'},
+    [{path:'password-reset.md',score:9.4,tagged:true},{path:'security-phishing.md',score:3.1}],
+    '1. Verify identity by callback.\n2. Unlock in the admin console (Users > Unlock), or it clears itself in 30 minutes.\n3. Self service: password.northline.com > Forgot password.\n4. Sign out and in on the office network so the new password is cached.\n\nEscalate if: the lock repeats within a day (security, L2).',
+    'Hi Maria,\n\nAccount locked after too many wrong passwords. Unlocked on our side.\n\nDo this:\n1. Go to password.northline.com, Forgot password.\n2. Enter the Authenticator code, set a new password.\n3. Sign out and back in on the laptop while on the office network or VPN.\n\nIf it still fails, reply here with the exact message.\n\nIT Service Desk',
+    'JSON from the model · password is L1 by policy floor'),
+   {node:'gate',dur:.05,route:'policy.decide → auto',delta:{decision:'auto'},note:'L1 + password + 0.93 over 0.80 + AUTO_REPLY on'},
+   {node:'auto_send',dur:.3,delta:{outcome:'auto_replied',notes:['reply sent, tagged auto']},note:'system.reply(auto=True) · Freshservice would be POST /tickets/1001/reply'},
+   logStep,endStep]},
+ {id:'INC-1019',tag:'L2 escalate',requester:'ben.foster@northline.com',channel:'email',subject:'Laptop will not turn on',
+  body:'My laptop will not turn on at all. No light, tried the charger from a colleague. Philadelphia office.',
+  steps:[...head('INC-1019',
+    {category:'hardware',level:'L2',urgency:'high',confidence:0.90,summary:'Laptop dead, no power light, charger already swapped, Philadelphia',missing_info:[],model:'ollama:gemma3:4b'},
+    [{path:'hardware.md',score:7.8,tagged:true},{path:'vpn-globalprotect.md',score:2.0}],
+    '1. Hold the power button 15 seconds, unplug the dock, charger straight into the laptop.\n2. No light after that: swap from stock, L2 moves the data with the standard migration.\n3. Broken device goes to repair.\n\nEscalate if: always, hardware needs hands (L2 desktop support).',
+    'Hi Ben,\n\nLaptop dead, no light, charger already swapped.\nThis is with a specialist now, with the details attached. Updates come on this ticket.\n\nIT Service Desk',
+    'JSON from the model · hardware floor is L2','runbook says: hands needed'),
+   {node:'gate',dur:.05,route:'policy.decide → escalate',delta:{decision:'escalate'},note:'L2 + 0.90 over 0.80 + AUTO_ESCALATE on'},
+   ...escalateSteps('L2','ack to Ben · private note: summary, suggested fix, hardware.md · group L2 desktop','escalated_L2')]},
+ {id:'INC-1007',tag:'needs a person',requester:'sara.kim@northline.com',channel:'portal',subject:'How do I set up VPN on the new laptop',
+  body:'Just got the new laptop from the office. Where do I get GlobalProtect and what portal address do I use?',
+  steps:[...head('INC-1007',
+    {category:'vpn',level:'L1',urgency:'normal',confidence:0.70,summary:'First time VPN setup on a new laptop',missing_info:[],model:'ollama:gemma3:4b'},
+    [{path:'vpn-globalprotect.md',score:24.8,tagged:true},{path:'how-to-microsoft-365.md',score:6.0}],
+    '1. Install GlobalProtect from Software Center (Windows) or Self Service (Mac).\n2. Portal address: vpn.northline.com.\n3. Sign in with the normal account and MFA.\n\nEscalate if: several users at one location fail at once (network, L3).',
+    'Hi Sara,\n\nFirst time VPN setup on the new laptop.\n\nDo this:\n1. Open Software Center, install GlobalProtect.\n2. Portal: vpn.northline.com.\n3. Sign in with your normal account, approve the MFA prompt.\n\nIf it will not connect, reply with the exact message.\n\nIT Service Desk',
+    'JSON from the model · confidence 0.70'),
+   {node:'gate',dur:.05,route:'policy.decide → review',delta:{decision:'review'},note:'L1 vpn, but 0.70 is under the 0.80 gate'},
+   reviewPause('INC-1007',{category:'vpn',level:'L1',urgency:'normal',confidence:0.70,summary:'First time VPN setup on a new laptop',missing_info:[],model:'ollama:gemma3:4b'},
+     'Hi Sara,\n\nFirst time VPN setup on the new laptop.\n\nDo this:\n1. Start menu, type Software Center, open it, install GlobalProtect.\n2. Portal: vpn.northline.com.\n3. Sign in with your normal account, approve the MFA prompt.\n\nIf it will not connect, reply with the exact message.\n\nIT Service Desk',
+     'say where Software Center is')]},
+ {id:'INC-1029',tag:'L3 outage',requester:'steve.hall@northline.com',channel:'phone',subject:'Email is down for everyone',
+  body:'Nobody can send or receive email, the whole office is affected. Outlook and webmail both fail.',
+  steps:[...head('INC-1029',
+    {category:'outage',level:'L3',urgency:'high',confidence:0.97,summary:'Email down for the whole office, Outlook and webmail',missing_info:[],model:'ollama:gemma3:4b'},
+    [{path:'network-and-outage.md',score:8.9,tagged:true},{path:'outlook-email.md',score:5.2}],
+    '1. Confirm scope: how many people, which office, since when.\n2. Declare the incident, post in #it-status with the next update time.\n3. Check status.office.com before touching anything; most whole company outages are the vendor.\n4. Update every 30 minutes.\n\nEscalate if: always L3.',
+    'Hi Steve,\n\nEmail down for the whole office, Outlook and webmail.\nThis is with the incident team now, with the details attached. Updates come on this ticket.\n\nIT Service Desk',
+    'JSON from the model · outage floor is L3','runbook: declare the incident'),
+   {node:'gate',dur:.05,route:'policy.decide → escalate',delta:{decision:'escalate'},note:'L3 + 0.97 over 0.80 + AUTO_ESCALATE on'},
+   ...escalateSteps('L3','ack to Steve · incident note: scope, vendor status page, 30 minute updates · group L3 incident','escalated_L3')]},
+];
+
+function fireSpark(key){
+  const sp=sparkEls[key];if(!sp)return;
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  sp.classList.remove('go');void sp.getBoundingClientRect();sp.classList.add('go');
+}
+
+/* ---------------- Simulator engine ---------------- */
+const KEYS=['ticket','triage','hits','solution','draft','decision','edit_note','outcome','notes'];
+const REDUCED=new Set(['notes']);
+const sim={sc:null,queue:[],i:0,state:{},prev:null,timer:null,running:false,t:0,waiting:null,changed:new Set(),calls:{model:0,pauses:0}};
+const LLM=new Set(['triage','solve','draft']);
+const fmt=v=>JSON.stringify(v,null,2);
+
+function loadScenario(id){
+  stop();
+  sim.sc=SCENARIOS.find(s=>s.id===id);sim.queue=sim.sc.steps.slice();sim.i=0;sim.prev=null;sim.t=0;sim.waiting=null;sim.calls={model:0,pauses:0};
+  sim.state={ticket:{id:sim.sc.id,requester:sim.sc.requester,subject:sim.sc.subject}};sim.changed=new Set(['ticket']);
+  document.querySelectorAll('#chips .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.id===id));
+  $('#ticket').innerHTML=`<div class="h"><b>${sim.sc.id}</b><span>${esc(sim.sc.subject)}</span><span class="muted">${esc(sim.sc.requester)} · ${sim.sc.channel}</span></div><p>${esc(sim.sc.body)}</p>`;
+  $('#log').innerHTML='';$('#intr').innerHTML='';$('#summary').innerHTML='';
+  Object.values(nodeEls).forEach(g=>g.classList.remove('on','was','paused'));
+  Object.values(edgeEls).forEach(p=>{p.classList.remove('on','was');p.setAttribute('marker-end','url(#arr)');});
+  renderState();setStatus('ready');buttons();
+}
+function setStatus(s){
+  const el=$('#status');el.textContent=s;
+  el.className='st '+(/running|step/.test(s)?'live':/paused: interrupt/.test(s)?'hold':/finished/.test(s)?'done':'');
+  const r=$('#railstat');if(r)r.textContent=s;
+}
+function buttons(){const done=!sim.waiting&&sim.i>=sim.queue.length;$('#run').textContent=sim.running?'Pause':'Run';$('#run').disabled=done||!!sim.waiting;$('#step').disabled=done||!!sim.waiting||sim.running;}
+function stop(){sim.running=false;clearTimeout(sim.timer);}
+function renderState(){
+  $('#state').innerHTML=KEYS.map(k=>{
+    const v=sim.state[k],has=v!==undefined,red=REDUCED.has(k)?`<span class="red"> operator.add</span>`:'';
+    return `<span class="k${sim.changed.has(k)?' chg':''}"><span class="key">${k}</span>${red}: ${has?esc(fmt(v)):'<span class="unset">unset</span>'}</span>`;
+  }).join('');
+}
+function logLine(step,tLabel){
+  const d=document.createElement('div');
+  const cls=step.interrupt?'hu':step.cls||(step.node==='END'?'end':'');
+  d.className=cls;
+  d.innerHTML=`<span class="t">${tLabel}</span><span class="n${cls==='hu'?' hu':''}">${step.node}</span><span>${esc((step.route?step.route+' · ':'')+(step.note||''))}</span>`;
+  const log=$('#log');log.appendChild(d);log.scrollTop=log.scrollHeight;
+}
+function apply(step){
+  Object.values(edgeEls).forEach(p=>{if(p.classList.contains('on')){p.classList.remove('on');p.classList.add('was');p.setAttribute('marker-end','url(#arr)');}});
+  if(sim.prev&&sim.prev!==step.node){const p=edgeEls[sim.prev+'>'+step.node];if(p){p.classList.remove('was');p.classList.add('on');p.setAttribute('marker-end','url(#arr-on)');}
+    fireSpark(sim.prev+'>'+step.node);}
+  Object.values(nodeEls).forEach(g=>{if(g.classList.contains('on')){g.classList.remove('on');g.classList.add('was');}g.classList.remove('paused');});
+  nodeEls[step.node].classList.add(step.interrupt?'paused':'on');nodeEls[step.node].classList.remove('was');
+  sim.changed=new Set();
+  if(step.delta){for(const k in step.delta){sim.state[k]=REDUCED.has(k)?(sim.state[k]||[]).concat(step.delta[k]):step.delta[k];sim.changed.add(k);}}
+  if(LLM.has(step.node)&&!step.resume)sim.calls.model++;if(step.interrupt)sim.calls.pauses++;
+  sim.t+=step.dur||0;
+  logLine(step,'t+'+sim.t.toFixed(1)+'s');renderState();sim.prev=step.node;
+  if(step.interrupt){sim.waiting=step;showInterrupt(step);setStatus('paused: interrupt()');}
+  else if(step.node==='END'){finishRun();}
+  else setStatus('running '+step.node);
+  if(sim.i===1||step.interrupt)setTab('run');
+}
+function showInterrupt(step){
+  $('#intr').innerHTML=`<div class="intr"><h4>Paused. The dashboard shows this and waits:</h4><pre>${esc(fmt(step.interrupt))}</pre>
+    <div class="opts">${step.options.map((o,i)=>`<div class="opt"><button class="btn" data-opt="${i}">${esc(o.label)}</button><small>click → Command(resume=${esc(o.resume)})</small></div>`).join('')}</div></div>`;
+  $('#intr').querySelectorAll('[data-opt]').forEach(b=>b.addEventListener('click',()=>choose(step.options[+b.dataset.opt])));
+}
+function choose(opt){
+  if(!sim.waiting)return;
+  const step=sim.waiting;sim.waiting=null;$('#intr').innerHTML='';
+  nodeEls[step.node].classList.remove('paused');nodeEls[step.node].classList.add('was');
+  sim.queue.splice(sim.i,0,...opt.next);
+  const d=document.createElement('div');d.className='hu';d.innerHTML=`<span class="t">${esc(opt.gap||'')}</span><span class="n hu">resume</span><span>same thread ${sim.sc.id}, same node, interrupt() now returns the click</span>`;$('#log').appendChild(d);
+  sim.running=true;buttons();tick();
+}
+function finishRun(){
+  stop();const s=sim.state;
+  $('#summary').innerHTML=`<div class="summary">Done. outcome = <b>${s.outcome||'none'}</b> · ${sim.calls.model} model calls · ${sim.calls.pauses} ${sim.calls.pauses===1?'pause':'pauses'} for a person · ${sim.t.toFixed(1)} s of agent work.</div>`;
+  setStatus('finished');buttons();
+}
+function stepOnce(){if(sim.waiting)return;const step=sim.queue[sim.i];if(!step){finishRun();return;}sim.i++;apply(step);buttons();}
+function tick(){if(!sim.running)return;stepOnce();if(sim.waiting||sim.i>=sim.queue.length){sim.running=false;buttons();return;}sim.timer=setTimeout(tick,850);}
+$('#run').addEventListener('click',()=>{if(sim.running){stop();setStatus('paused');buttons();return;}sim.running=true;buttons();tick();});
+$('#step').addEventListener('click',()=>{stop();stepOnce();buttons();});
+$('#reset').addEventListener('click',()=>loadScenario(sim.sc.id));
+$('#chips').innerHTML=SCENARIOS.map(s=>`<button class="chip" data-id="${s.id}" aria-pressed="false"><small>${s.id}</small>${esc(s.subject)}<small>${esc(s.tag)}</small></button>`).join('');
+document.querySelectorAll('#chips .chip').forEach(c=>c.addEventListener('click',()=>loadScenario(c.dataset.id)));
+
+/* ---------------- Questions for Val ---------------- */
+const QS=[
+ ['Where do the hackathon tickets really come from?','Sample set and dashboard are built. If the organisers hand out a dataset or a sandbox (Freshservice, Zendesk, Jira, email), tell me which and I wire the adapter Saturday.'],
+ ['Team or solo, and who codes what?','If someone else touches the code, I split it: adapters, prompts, dashboard. If solo, I keep it one folder.'],
+ ['What do the judges score?','Working demo, code quality, business value, or presentation. The two minute script changes with the answer.'],
+ ['Which laptop on the projector?','Acer has Ollama and the GPU. Mac needs Ollama installed first (one brew line). Both is fine.'],
+ ['Does the API console have credits?','Claude in the demo needs the $5 on platform.claude.com, the app wallet does not count. Without it the demo is Ollama only, which still works.'],
+ ['Auto reply on stage: yes or off?','On shows autonomy, off shows control. Both are one line. My pick: on, and show the kill switch once.'],
+ ['Real runbooks or fake ones?','The 13 sample runbooks are fake but realistic. Real ones from work would make the solve step much better. Even 5 would do.'],
+ ['Company name and offices in the demo?','Northline, New York and Philadelphia right now. Say the word and I rename.'],
+ ['Do you want Telegram approvals too?','homedesk already has it. Phone approval on stage is a nice touch, 30 minutes to add.'],
+ ['What does "integrated into the ticket responding system" mean at the hackathon?','If it means their system: adapter. If it means the whole flow end to end: it is done. If it means a Slack or Teams bot: tell me, half a day.'],
+];
+function renderQs(){
+  let done={};try{done=JSON.parse(localStorage.getItem('td-qs')||'{}');}catch(e){}
+  $('#qs').innerHTML=QS.map((q,i)=>`<label class="q-item${done[i]?' done':''}"><input type="checkbox" data-i="${i}"${done[i]?' checked':''}><div><b>${esc(q[0])}</b><span>${esc(q[1])}</span></div></label>`).join('');
+  $('#qs').querySelectorAll('input').forEach(c=>c.addEventListener('change',()=>{done[c.dataset.i]=c.checked;try{localStorage.setItem('td-qs',JSON.stringify(done));}catch(e){}c.closest('.q-item').classList.toggle('done',c.checked);}));
+}
+
+/* ---------------- Doc sections ---------------- */
+function fillCode(){document.querySelectorAll('code[data-src]').forEach(c=>{c.innerHTML=hl(srcOf(c.dataset.src),c.dataset.lang||'py');});}
+function copySetup(){
+  document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
+    const text=srcOf(b.dataset.copy),orig=b.textContent,flash=m=>{b.textContent=m;setTimeout(()=>b.textContent=orig,1400);};
+    const fallback=()=>{const pre=b.parentElement.querySelector('pre');const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r);flash('Selected, press copy');};
+    try{navigator.clipboard.writeText(text).then(()=>flash('Copied'),fallback);}catch(e){fallback();}
+  }));
+}
+
+/* ---------------- Theme ---------------- */
+const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 1.8v2.4M12 19.8v2.4M4.0 4.0l1.7 1.7M18.3 18.3l1.7 1.7M1.8 12h2.4M19.8 12h2.4M4.0 20l1.7-1.7M18.3 5.7L20 4.0"/></svg>';
+const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5a8.6 8.6 0 1 0 10.8 10.8z"/></svg>';
+function paintTheme(){
+  const dark=document.documentElement.getAttribute('data-theme')!=='light'&&
+    (document.documentElement.getAttribute('data-theme')==='dark'||!window.matchMedia('(prefers-color-scheme: light)').matches);
+  $('#theme').innerHTML=dark?SUN:MOON;
+}
+try{const t=localStorage.getItem('td-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}
+paintTheme();
+$('#theme').addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const dark=cur?cur==='dark':!window.matchMedia('(prefers-color-scheme: light)').matches;
+  const next=dark?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  try{localStorage.setItem('td-theme',next);}catch(e){}
+  paintTheme();
+});
+
+/* ---------------- Counters ---------------- */
+function countUp(){
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const to=+el.dataset.count,t0=performance.now(),dur=520;
+    const f=t=>{const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
+      el.textContent=Math.round(to*e);if(k<1)requestAnimationFrame(f);else el.textContent=to;};
+    requestAnimationFrame(f);
+  });
+}
+
+/* ---------------- Scroll: read progress + active section ---------------- */
+const secs=[...document.querySelectorAll('section[id], .console[id]')];
+const links=new Map([...document.querySelectorAll('nav.sec a')].map(a=>[a.getAttribute('href').slice(1),a]));
+let ticking=false;
+function onScroll(){
+  const max=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)-innerHeight;
+  $('#scan').style.width=(max>0?Math.min(100,Math.max(0,(scrollY/max)*100)):0)+'%';
+  let cur=null;
+  for(const s of secs){if(s.getBoundingClientRect().top<=110)cur=s.id;}
+  links.forEach((a,id)=>a.classList.toggle('on',id===cur));
+  ticking=false;
+}
+addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(onScroll);}},{passive:true});
+
+/* ---------------- Keyboard, like a real tool ---------------- */
+addEventListener('keydown',e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  const t=e.target;
+  if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable))return;
+  const k=e.key.toLowerCase();
+  if(k==='r'){e.preventDefault();$('#run').disabled||$('#run').click();}
+  else if(k==='s'){e.preventDefault();$('#step').disabled||$('#step').click();}
+  else if(k==='0'||k==='escape'){e.preventDefault();$('#reset').click();}
+  else if(k>='1'&&k<='4'){const c=document.querySelectorAll('#chips .chip')[+k-1];if(c){e.preventDefault();c.click();
+    document.getElementById('graph').scrollIntoView({block:'nearest',behavior:'smooth'});}}
+  else if(k==='t'){e.preventDefault();$('#theme').click();}
+});
+
+renderGraph();fillCode();copySetup();renderQs();loadScenario(SCENARIOS[0].id);countUp();onScroll();
+})();
+</script>
